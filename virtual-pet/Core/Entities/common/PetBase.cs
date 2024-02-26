@@ -7,6 +7,7 @@ namespace virtual_pet.Base
     internal abstract class PetBase
     {
         #region PROPERTYS
+        public string Name {  get; set; }
         public Stat Energy = new();
         public Stat Hunger = new();
         public Stat Thirst = new();
@@ -39,6 +40,8 @@ namespace virtual_pet.Base
             return $"[ Energy: {Energy.Value}, Hunger: {Hunger.Value}, Thirst: {Thirst.Value} ]";
         }
 
+        // Abstract method to get the pet type
+        public abstract string GetPetType();
         #endregion METH
     }
 }
