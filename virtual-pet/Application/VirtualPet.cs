@@ -21,6 +21,8 @@ namespace virtual_pet.Application
             ConsoleMenu consoleMenu = new ConsoleMenu(menuItems);
             PetManager petManager = new PetManager();
 
+            while (true)
+            {
                 int selectedIndex = consoleMenu.ShowMenu();
                 var pets = petManager.GetPets();
 
@@ -73,6 +75,9 @@ namespace virtual_pet.Application
                         break;
                 }
 
+                Console.WriteLine("\nPress Enter to go back to the main menu...");
+                Console.ReadLine();
+            }
 
         }
     }
