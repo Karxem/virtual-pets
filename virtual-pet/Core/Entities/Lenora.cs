@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using virtual_pet.Base;
-
-namespace virtual_pet
+﻿namespace virtual_pet.Pets
 {
-    internal class Lenora : PetBase
+    internal class Lenora : Base.PetBase
     {
-
+        public override string GetPetType()
+        {
+            return "Lenora";
+        }
     }
 }
