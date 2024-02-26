@@ -1,8 +1,7 @@
-﻿using System;
-using virtual_pet.Core.Models;
+﻿using virtual_pet.Core.Models;
 
 
-namespace virtual_pet.Base
+namespace virtual_pet.Core.Entities.Common
 {
     internal abstract class PetBase
     {

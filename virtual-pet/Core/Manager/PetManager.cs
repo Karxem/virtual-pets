@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using virtual_pet.Base;
+using virtual_pet.Core.Entities.Common;
 using virtual_pet.Core.Models;
-using virtual_pet.Pets;
+
 
 namespace virtual_pet.Core.Managers
 {
@@ -42,8 +42,7 @@ namespace virtual_pet.Core.Managers
 
             SavePetsToFile();
         }
-
-
+ 
         public PetBase LoadPet(string name)
         {
             // Load the PetModel from file based on the name

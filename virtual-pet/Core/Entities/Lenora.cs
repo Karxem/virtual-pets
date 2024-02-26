@@ -1,6 +1,8 @@
-﻿namespace virtual_pet.Pets
+﻿using virtual_pet.Core.Entities.Common;
+
+namespace virtual_pet.Core
 {
-    internal class Lenora : Base.PetBase
+    internal class Lenora : PetBase
     {
         public override string GetPetType()
         {
