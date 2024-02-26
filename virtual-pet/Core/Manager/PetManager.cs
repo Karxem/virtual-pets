@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Timers;
 using virtual_pet.Core.Entities.Common;
 using virtual_pet.Core.Models;
 
@@ -9,11 +10,14 @@ namespace virtual_pet.Core.Managers
     {
         // TODO: Find a solution for this issue, since this is not supposed to be hardcoded to my filepath lol
         private const string FilePath = @"E:\Documents\GitHub\virtual-pets\virtual-pet\Assets\pets.json";
+        private System.Timers.Timer Timer;
+        private static int Interval = 10000;
         private List<Pet> petModels;
 
         public PetManager()
         {
             LoadPets();
+            SetTimer();
         }
 
         public void SavePet(PetBase pet)
@@ -87,6 +91,31 @@ namespace virtual_pet.Core.Managers
 
             string json = JsonConvert.SerializeObject(petModels, Formatting.Indented);
             File.WriteAllText(filePath, json);
+        }
+
+        private void SetTimer()
+        {
+            Timer = new System.Timers.Timer(Interval);
+            Timer.Elapsed += OnTimedEvent;
+            Timer.AutoReset = true;
+            Timer.Enabled = true;
+        }
+
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            var pets = GetPets();
+            foreach (var pet in  pets)
+            {
+                if (pet == null) {
+                    return;
+                }
+
+                var petInstance = LoadPet(pet.Name);
+                petInstance.Tick();
+
+                Console.WriteLine(petInstance.Name + petInstance.Energy);
+                SavePet(petInstance);
+            }
         }
 
         private PetBase CreatePetInstance(string type)

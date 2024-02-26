@@ -7,7 +7,6 @@ namespace virtual_pet.Application
 {
     public class VirtualPets
     {
-        private static PetManager petManager = new PetManager();
 
         static void Main()
         {
@@ -19,6 +18,7 @@ namespace virtual_pet.Application
             "Exit"
             };
             ConsoleMenu consoleMenu = new ConsoleMenu(menuItems);
+            PetManager petManager = new PetManager();
 
             int selectedIndex = consoleMenu.ShowMenu();
             var pets = petManager.GetPets();
