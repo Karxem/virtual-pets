@@ -12,7 +12,7 @@ namespace virtual_pet.Core.Managers
         private const string FilePath = @"E:\Documents\GitHub\virtual-pets\virtual-pet\Assets\pets.json";
         private System.Timers.Timer Timer;
         private static int Interval = 10000;
-        private List<Pet> petModels;
+        private List<PetModel> petModels;
 
         public PetManager()
         {
@@ -22,9 +22,10 @@ namespace virtual_pet.Core.Managers
 
         public void SavePet(PetBase pet)
         {
-            Pet petModel = new Pet(
+            PetModel petModel = new PetModel(
                 name: pet.Name,
                 type: pet.GetPetType(),
+                health: pet.Health.Value,
                 energy: pet.Energy.Value,
                 hunger: pet.Hunger.Value,
                 thirst: pet.Thirst.Value
@@ -39,6 +40,7 @@ namespace virtual_pet.Core.Managers
             }
             else
             {
+                existingPet.Health = petModel.Health;
                 existingPet.Energy = petModel.Energy;
                 existingPet.Hunger = petModel.Hunger;
                 existingPet.Thirst = petModel.Thirst;
@@ -46,10 +48,10 @@ namespace virtual_pet.Core.Managers
 
             SavePetsToFile();
         }
- 
+
+        // Load a pet from file based on its name
         public PetBase LoadPet(string name)
         {
-            // Load the PetModel from file based on the name
             var loadedPetModel = petModels.Find(p => p.Name == name);
 
             if (loadedPetModel == null)
@@ -60,6 +62,7 @@ namespace virtual_pet.Core.Managers
             // Create a new PetBase instance and set its state based on the loaded PetModel
             PetBase pet = CreatePetInstance(loadedPetModel.Type);
             pet.Name = loadedPetModel.Name;
+            pet.Health.Value = loadedPetModel.Health;
             pet.Energy.Value = loadedPetModel.Energy;
             pet.Hunger.Value = loadedPetModel.Hunger;
             pet.Thirst.Value = loadedPetModel.Thirst;
@@ -67,7 +70,7 @@ namespace virtual_pet.Core.Managers
             return pet;
         }
 
-        public List<Pet> GetPets()
+        public List<PetModel> GetPets()
         {
             return petModels;
         }
@@ -82,7 +85,7 @@ namespace virtual_pet.Core.Managers
             }
 
             string json = File.ReadAllText(filePath);
-            petModels = JsonConvert.DeserializeObject<List<Pet>>(json);
+            petModels = JsonConvert.DeserializeObject<List<PetModel>>(json);
         }
 
         private void SavePetsToFile()
@@ -113,12 +116,11 @@ namespace virtual_pet.Core.Managers
                 var petInstance = LoadPet(pet.Name);
                 petInstance.Tick();
 
-                Console.WriteLine(petInstance.Name + petInstance.Energy);
                 SavePet(petInstance);
             }
         }
 
-        private PetBase CreatePetInstance(string type)
+        private static PetBase CreatePetInstance(string type)
         {
             switch (type)
             {
