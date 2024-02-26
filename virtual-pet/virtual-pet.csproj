@@ -8,4 +8,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Core\" />
+    <None Remove="Core\Entities\" />
+    <None Remove="Core\Manager\" />
+    <None Remove="Application\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\" />
+    <Folder Include="Core\Entities\" />
+    <Folder Include="Core\Manager\" />
+    <Folder Include="Application\" />
+  </ItemGroup>
 </Project>
