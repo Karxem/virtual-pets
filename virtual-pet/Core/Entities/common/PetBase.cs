@@ -1,4 +1,5 @@
 ﻿using System;
+using virtual_pet.Core.Models;
 
 
 namespace virtual_pet.Base
@@ -7,9 +8,9 @@ namespace virtual_pet.Base
     internal abstract class PetBase
     {
         #region PROPERTYS
-        public Stat Energy = new();
-        public Stat Fed = new();
-        public Stat Hydration = new();
+        public StatModel Energy = new();
+        public StatModel Fed = new();
+        public StatModel Hydration = new();
         #endregion PROPERTYS
 
         #region METH

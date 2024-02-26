@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -15,8 +15,6 @@
     <None Remove="Application\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\" />
-    <Folder Include="Core\Entities\" />
     <Folder Include="Core\Manager\" />
     <Folder Include="Application\" />
   </ItemGroup>
