@@ -3,7 +3,7 @@
 namespace virtual_pet.Core.Models {
     // TODO: Add a leveling handler to enhance stats over time
     // TODO: Remove abstract methods, we need to keep track of functions inside Base classes and models
-    internal class Stat
+    internal class StatModel
     {
         private double _Value = 0.0;
         private double _MinValue = 0.0;
@@ -23,14 +23,14 @@ namespace virtual_pet.Core.Models {
             set { _Value = Math.Min(100, Math.Max(0, value)); }
         }
 
-        public static implicit operator double(Stat stat) { return stat.Value; }
+        public static implicit operator double(StatModel stat) { return stat.Value; }
 
-        public static double operator +(Stat stat, double value)
+        public static double operator +(StatModel stat, double value)
         {
             return stat.Value + value;
         }
 
-        public static double operator -(Stat stat, double value)
+        public static double operator -(StatModel stat, double value)
         {
             return stat.Value - value;
         }
