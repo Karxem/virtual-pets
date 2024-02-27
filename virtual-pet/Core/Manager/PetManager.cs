@@ -8,18 +8,28 @@ namespace virtual_pet.Core.Managers
 {
     internal class PetManager
     {
-        // TODO: Find a solution for this issue, since this is not supposed to be hardcoded to my filepath lol
-        private const string FilePath = @"E:\Documents\GitHub\virtual-pets\virtual-pet\Assets\pets.json";
+        private string FilePath;
         private System.Timers.Timer Timer;
         private static int Interval = 10000;
         private List<PetModel> petModels;
 
         public PetManager()
         {
+            FilePath = LoadFilePath();
             LoadPets();
             SetTimer();
         }
 
+        private string LoadFilePath()
+        {
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            string myAppFolder = Path.Combine(appDataPath, "virtual-pet");
+            Directory.CreateDirectory(myAppFolder); // Create file if not exists
+
+            string fileName = "pets.json";
+            return Path.Combine(myAppFolder, fileName);
+        }
         public void SavePet(PetBase pet)
         {
             PetModel petModel = new PetModel(
