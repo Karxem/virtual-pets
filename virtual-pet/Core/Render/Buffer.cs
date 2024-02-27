@@ -9,10 +9,10 @@ namespace virtual_pet.Core.Render
 {
     public class Buffer
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public uint X { get; set; }
+        public uint Y { get; set; }
+        public uint Width { get; private set; }
+        public uint Height { get; private set; }
 
         public ConsoleColor BackgroundColor { get; set; }
         public ConsoleColor ForegroundColor {  get; set; }
@@ -20,18 +20,32 @@ namespace virtual_pet.Core.Render
         ConsoleColor DefaultBackgroundColor = ConsoleColor.Black;
         ConsoleColor DefaultForegroundColor = ConsoleColor.White;
 
-        int line = 0;
+        uint line = 0;
 
         Pixel[,] buffer = null;
 
-        public Buffer(int x, int y, int width, int height)
+        public Buffer(uint x, uint y, uint width, uint height)
         {
+            SetLocation(x, y);
+            InitBuffer(width, height);
+        }
+
+        public void SetLocation(uint x, uint y) {
             this.X = x;
             this.Y = y;
+        }
+
+        public void InitBuffer(uint width, uint height) {
+            this.buffer = new Pixel[width, height];
             this.Width = width;
             this.Height = height;
-
-            this.buffer = new Pixel[width, height];
+            for (int i = 0; i < Width; i++)
+            {
+                for (int j = 0; j < Height; j++)
+                {
+                    this.buffer[i, j] = new Pixel();
+                }
+            }
         }
 
         public void Clear()
@@ -48,7 +62,7 @@ namespace virtual_pet.Core.Render
 
         public void WriteLine(string str)
         {
-            for (int i = 0; i < str.Length || i < Width; i++)
+            for (int i = 0; i < str.Length && i < Width; i++)
             {
                 if (str[i] == '\n')
                 {
@@ -64,7 +78,7 @@ namespace virtual_pet.Core.Render
 
         public void WriteLine(string str, ConsoleColor back, ConsoleColor fore)
         {
-            for (int i = 0; i < str.Length || i < Width; i++)
+            for (int i = 0; i < str.Length && i < Width; i++)
             {
                 if (str[i] == '\n')
                 {
@@ -88,15 +102,15 @@ namespace virtual_pet.Core.Render
         {
             get
             {
-                if (x < 0 || x > Width ||
-                    y < 0 || y > Height)
+                if (x < 0 || x >= Width ||
+                    y < 0 || y >= Height)
                     return new Pixel();
                 return buffer[x, y];
             }
             set
             {
-                if (x < 0 || x > Width ||
-                    y < 0 || y > Height)
+                if (x < 0 || x >= Width ||
+                    y < 0 || y >= Height)
                     return;
                 buffer[x, y] = value;
             }
