@@ -8,12 +8,11 @@ It's designed to provide a simple and fun experience similar to a console-based 
 Take care of your virtual pet, train it, and engage in battles with other virtual pets.  
 
 ## Getting Started
-To run the Virtual Pet Console Game, make sure you have [.NET 7](https://dotnet.microsoft.com/download/dotnet/7.0) installed on your machine.
+To run Virtual Pet, make sure you have [.NET 7](https://dotnet.microsoft.com/download/dotnet/7.0) installed on your machine.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/virtual-pet.git
-
+   git clone https://github.com/Karxem/virtual-pets.git
 
 ## Gameplay
 
@@ -27,9 +26,10 @@ Follow the on-screen instructions to interact with your virtual pet and enjoy th
 
 ## Save File Location
 
-Your progress and virtual pet data are saved in a file. The save file can be found at the following locations:
+Your progress and virtual pet data are saved in a JSON file. The save file can be found at the following locations:
 
     Windows: ~/%appdata%/virtual-pet/pets.json
     Mac: ~/.config/virtual-pet/pets.json
+
 
 ### This project is licensed under the MIT License - see the LICENSE file for details.
