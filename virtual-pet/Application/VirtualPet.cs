@@ -1,90 +1,100 @@
 ﻿using virtual_pet.Core.Entities.Common;
-using virtual_pet.Core.Levels;
 using virtual_pet.Core.Managers;
+using virtual_pet.Core.Models;
 using virtual_pet.Core.Utils;
+using virtual_pet.Core.Render;
+using virtual_pet.Core.Input;
+using virtual_pet.Core;
 
 namespace virtual_pet.Application
 {
     public class VirtualPets
     {
-        private static readonly PetManager petManager = new PetManager();
-
-        public static void Main()
-        {
-            List<string> menuItems = new List<string>
+        static PlayerController controller = new PlayerController();
+        static List<string> menuItems = new List<string>
             {
-                "Show Pet Overview",
-                "Fill all pet stats",
-                "Add a pet",
-                "Gain experience",
-                "Test first level",
-                "Exit"
+            "Show Pet Overview",
+            "Fill all pet stats",
+            "Add a pet",
+            "Exit"
             };
+        static ConsoleMenuBuffered consoleMenu = new ConsoleMenuBuffered(Renderer.MenuBuffer, onItemSelected, menuItems);
+        static PetManager petManager = new PetManager();
+        static List<PetModel> pets = new List<PetModel>();
+        static bool running = true;
 
-            ConsoleMenu consoleMenu = new ConsoleMenu(menuItems);
+        static void Main()
+        {
+            Console.CursorVisible = false;
+            //int selectedIndex = consoleMenu.ShowMenu();
+            pets = petManager.GetPets();
+            controller.Listener = consoleMenu;
 
-            while (true)
+            while (running)
             {
-                int selectedIndex = consoleMenu.ShowMenu();
-                var pets = petManager.GetPets();
-
-                if (selectedIndex == -1)
-                {
-                    continue;
-                }
-
-                if (pets == null)
-                {
-                    return;
-                }
-
-                switch (selectedIndex)
-                {
-                    case 0:
-                        ShowPetOverview(pets);
-                        break;
-                    case 1:
-                        FillAllPetStats(pets);
-                        break;
-                    case 2:
-                        AddNewPet();
-                        break;
-                    case 3:
-                        GainExperience(pets);
-                        break;
-                    case 4:
-                        LevelBase level = new TestLevel();
-                        level.StartFight(pets[0].Name);
-                        break;
-                    case 5:
-                        return;
-                    default:
-                        Console.WriteLine("An error occurred");
-                        break;
-                }
-
-                Console.WriteLine("Press Enter to go back to the main menu...");
-                Console.ReadLine();
+                //clear buffers
+                Renderer.ClearBuffers();
+                //fetch input
+                controller.Tick();
+                //
+                consoleMenu.Display();
+                //render the scene
+                Renderer.Render();
+                Thread.Sleep(30);
             }
+
+            Console.WriteLine("Exiting...");
+
         }
 
-        private static void ShowPetOverview(List<PetBase> pets)
-        {
-            Console.Clear();
-            Console.WriteLine(SendHeaderText(pets.Count));
-            Console.WriteLine("-------------------------------------------------------");
 
-            foreach (var pet in pets)
+        public static void onItemSelected(object sender, int selectedIndex) {
+            switch (selectedIndex)
             {
-                if (pet == null)
-                {
-                    continue;
-                }
+                case 0:
+                    Console.Clear();
+                    Console.WriteLine("Your Pets:");
+                    Console.WriteLine("-------------------------------------------------------");
 
-                Console.WriteLine($"< Name: {pet.Name ?? "Unknown"}, Type: {pet.GetPetType() ?? "Unknown"}, Level: {pet.Level?.Value ?? 0}");
-                Console.WriteLine($"< Energy: {pet.Energy?.Value ?? 0}, Attack: {pet.Attack?.Value ?? 0}, Defense: {pet.Defense?.Value ?? 0}");
-                Console.WriteLine($"< Health: {pet.Health?.Value ?? 0}, Hunger: {pet.Hunger?.Value ?? 0}, Thirst: {pet.Thirst?.Value ?? 0}\n");
+                    foreach (var pet in pets)
+                    {
+                        Console.WriteLine($"Name: {pet.Name}, Health: {pet.Health}, Energy: {pet.Energy}, Hunger: {pet.Hunger}, Thirst: {pet.Thirst}");
+                    }
+                    break;
+                case 1:
+                    Console.Clear();
+
+                    foreach (var pet in pets)
+                    {
+                        var petInstance = petManager.LoadPet(pet.Name);
+                        petInstance.FillAll();
+                        petManager.SavePet(petInstance);
+
+                        Console.WriteLine($"{pet.Name} is filled up again!");
+                    }
+                    break;
+                case 2:
+                    Console.Clear();
+
+                    Console.Write("Name your new Pet: ");
+                    string petName = Console.ReadLine();
+
+                    PetBase newPet = new Lenora();
+                    newPet.Name = petName;
+                    newPet.FillAll();
+                    petManager.SavePet(newPet);
+
+                    Console.WriteLine($"Your new pet {petName} was added");
+                    break;
+                case 3:
+                    return;
+                default:
+                    Console.WriteLine("An error occured");
+                    break;
             }
+
+            Console.WriteLine("\nPress Enter to go back to the main menu...");
+            Console.ReadLine();
         }
 
 
