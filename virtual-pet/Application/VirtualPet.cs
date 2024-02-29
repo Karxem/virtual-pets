@@ -5,42 +5,101 @@ using virtual_pet.Core.Utils;
 using virtual_pet.Core.Render;
 using virtual_pet.Core.Input;
 using virtual_pet.Core;
+using System.Security.Cryptography.X509Certificates;
+using System.Reflection.Metadata.Ecma335;
 
-namespace virtual_pet.Application
-{
-    public class VirtualPets
-    {
+namespace virtual_pet.Application {
+    public class VirtualPets {
         static PlayerController controller = new PlayerController();
         static List<string> menuItems = new List<string>
             {
             "Show Pet Overview",
             "Fill all pet stats",
             "Add a pet",
-            "Exit"
+            "Exit",
+            "5",
+            "6",
+            "7",
+            "8"
             };
-        static ConsoleMenuBuffered consoleMenu = new ConsoleMenuBuffered(Renderer.MenuBuffer, onItemSelected, menuItems);
+        static ConsoleMenuBuffered consoleMenu = new ConsoleMenuBuffered( onItemSelected, menuItems);
+
+        static List<string> mainMenuItems = new List<string>
+            {
+            "Change Interface Size",
+            "Close Game"
+            };
+        static ConsoleMenuBuffered mainMenu = new ConsoleMenuBuffered( onMainItemSelected, mainMenuItems);
+
+
+        static List<string> debugMenuItems = new List<string>
+            {
+            "Debug Formatted Print"
+            };
+        static ConsoleMenuBuffered debugMenu = new ConsoleMenuBuffered( onDebugItemSelected, debugMenuItems);
+
+        static Stack<ConsoleMenuBuffered> menus = new Stack<ConsoleMenuBuffered>();
+        static Stack<IInputListener> inputListeners = new Stack<IInputListener>();
+
+        static ConsoleMenuBuffered currentMenu;
+        static OptionStrip? currentOtionStrip;
+
         static PetManager petManager = new PetManager();
         static List<PetModel> pets = new List<PetModel>();
+        static List<IDisplayable> displayables = new List<IDisplayable>();
+        static DebugPrint debugPrint = new DebugPrint();
+        static MainInputListener mainListener = new MainInputListener();
+
         static bool running = true;
 
-        static void Main()
-        {
+        public static void PassInput(IInputListener listener) {
+            inputListeners.Push(controller.Listener);
+            controller.Listener = listener;
+            currentOtionStrip = listener.GetOptionStrip();
+        }
+
+        public static void PopInput() {
+            controller.Listener = inputListeners.Pop();
+            currentOtionStrip = controller.Listener.GetOptionStrip();
+        }
+
+        public static void OpenMenu(ConsoleMenuBuffered consoleMenu) {
+            menus.Push(currentMenu);
+            currentMenu = consoleMenu;
+            PassInput(consoleMenu);
+        }
+
+        public static void CloseMenu() {
+            currentMenu = menus.Pop();
+            PopInput();
+        }
+
+
+        static void Main() {
             Console.CursorVisible = false;
+
+
             //int selectedIndex = consoleMenu.ShowMenu();
             pets = petManager.GetPets();
-            controller.Listener = consoleMenu;
-
+            PassInput(mainListener);
+            running = true;
             while (running)
             {
                 //clear buffers
                 Renderer.ClearBuffers();
                 //fetch input
                 controller.Tick();
+                Renderer.FitToScreen();
                 //
-                consoleMenu.Display();
+                foreach (IDisplayable d in displayables)
+                {
+                    d.Display(Renderer.PlayBuffer);
+                }
+                currentMenu?.Display(Renderer.MenuBuffer);
+                currentOtionStrip?.Display(Renderer.OptionStripBuffer);
                 //render the scene
                 Renderer.Render();
-                Thread.Sleep(30);
+                Thread.Sleep(60);
             }
 
             Console.WriteLine("Exiting...");
@@ -52,17 +111,17 @@ namespace virtual_pet.Application
             switch (selectedIndex)
             {
                 case 0:
-                    Console.Clear();
-                    Console.WriteLine("Your Pets:");
-                    Console.WriteLine("-------------------------------------------------------");
+                    //Console.Clear();
+                    Renderer.PlayBuffer.WriteLine("Your Pets:");
+                    Renderer.PlayBuffer.WriteLine("-------------------------------------------------------");
 
                     foreach (var pet in pets)
                     {
-                        Console.WriteLine($"Name: {pet.Name}, Health: {pet.Health}, Energy: {pet.Energy}, Hunger: {pet.Hunger}, Thirst: {pet.Thirst}");
+                        Renderer.PlayBuffer.WriteLine($"Name: {pet.Name}, Health: {pet.Health}, Energy: {pet.Energy}, Hunger: {pet.Hunger}, Thirst: {pet.Thirst}");
                     }
                     break;
                 case 1:
-                    Console.Clear();
+                    //Console.Clear();
 
                     foreach (var pet in pets)
                     {
@@ -70,11 +129,11 @@ namespace virtual_pet.Application
                         petInstance.FillAll();
                         petManager.SavePet(petInstance);
 
-                        Console.WriteLine($"{pet.Name} is filled up again!");
+                        Renderer.PlayBuffer.WriteLine($"{pet.Name} is filled up again!");
                     }
                     break;
                 case 2:
-                    Console.Clear();
+                    //Console.Clear();
 
                     Console.Write("Name your new Pet: ");
                     string petName = Console.ReadLine();
@@ -87,85 +146,98 @@ namespace virtual_pet.Application
                     Console.WriteLine($"Your new pet {petName} was added");
                     break;
                 case 3:
+                    running = false;
                     return;
                 default:
                     Console.WriteLine("An error occured");
                     break;
             }
 
-            Console.WriteLine("\nPress Enter to go back to the main menu...");
+            Renderer.MainBuffer.WriteLine("\nPress Enter to go back to the main menu...");
             Console.ReadLine();
         }
 
-
-        private static void FillAllPetStats(List<PetBase> pets)
-        {
-            Console.Clear();
-            foreach (var pet in pets)
+        public static void onDebugItemSelected(object sender, int selectedIndex) {
+            switch (selectedIndex)
             {
-                var petInstance = petManager.LoadPet(pet.Name);
-                petInstance.FillBasicNeeds();
-                petManager.SavePet(petInstance);
-                Console.WriteLine($"{pet.Name} is filled up again!");
+                case -1:
+                    CloseMenu();
+                    break;
+                case 0:
+                    if(!displayables.Contains(debugPrint))
+                        displayables.Add(debugPrint);
+                    else
+                        displayables.Remove(debugPrint);
+                    break;
+                default: break;
+            }
+            
+        }
+
+        public static void onMainItemSelected(object sender, int selectedIndex) {
+            switch (selectedIndex)
+            {
+                case -1:
+                    CloseMenu();
+                    break;
+                case 0:
+                    break;
+                case 1:
+                    running = false;return;
+                default:
+                    break;
             }
         }
 
-        private static void AddNewPet()
-        {
-            Console.Clear();
-            Console.Write("Name your new pet: ");
-            string petName = Console.ReadLine();
 
-            // Get a dynamically built list of pet types
-            List<string> petTypes = PetBase.GetPetTypes();
+        public class ChangeSizeListener : IInputListener {
 
-            // Display the list of pet types
-            Console.WriteLine("Choose a pet type:");
-            for (int i = 0; i < petTypes.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {petTypes[i]}");
+            OptionStrip optionStrip = new OptionStrip();
+
+            public void KeyPressed(ConsoleKeyInfo key) {
+                switch(key.Key){
+                    case ConsoleKey.DownArrow:
+                    {
+                        
+
+                    }break;
+                    case ConsoleKey.UpArrow:
+                    {
+
+                    }
+                    break;
+                    case ConsoleKey.RightArrow:
+                    {
+
+                    }
+                    break;
+                    case ConsoleKey.LeftArrow:
+                    {
+
+                    }
+                    break;
+                    default: break;
+                }
             }
 
-            // Read user input for pet type index
-            int typeIndex = Convert.ToInt32(Console.ReadLine());
-
-            // Validate user input and create a new pet instance
-            if (typeIndex < 1 || typeIndex > petTypes.Count)
-            {
-                Console.Clear();
-                Console.WriteLine("Invalid pet type selection!");
-                return;
-            }
-
-            string petType = petTypes[typeIndex - 1];
-            PetBase newPet = petManager.CreateNewPetInstance(petName, petType);
-
-            if (newPet == null)
-            {
-                return;
-            }
-
-            petManager.SavePet(newPet);
-            Console.Clear();
-            Console.WriteLine($"Your new pet {petName} of type {petType} was added");
+            public OptionStrip? GetOtptionStrip() => optionStrip;
         }
+        
+        public class MainInputListener : IInputListener {
+            public void KeyPressed(ConsoleKeyInfo key) {
+                switch (key.Key)
+                {
+                    case ConsoleKey.Escape:
+                        OpenMenu(mainMenu);
+                        break;
+                    case ConsoleKey.F2:
+                        OpenMenu(debugMenu);
+                        break;
+                    default:
+                        break;
 
-
-        private static void GainExperience(List<PetBase> pets)
-        {
-            Console.Clear();
-            foreach (var pet in pets)
-            {
-                PetBase activePet = petManager.LoadPet(pet.Name);
-                activePet.GainExperience();
-
-                petManager.SavePet(activePet);
+                }
             }
-        }
-
-        private static string SendHeaderText(int count)
-        {
-            return count == 0 ? "You don't have any pets" : "Your current pets";
         }
     }
 }
