@@ -9,10 +9,10 @@ namespace virtual_pet.Core.Render
 {
     public class Buffer
     {
-        public uint X { get; set; }
-        public uint Y { get; set; }
-        public uint Width { get; private set; }
-        public uint Height { get; private set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
 
         public ConsoleColor BackgroundColor { get; set; }
         public ConsoleColor ForegroundColor {  get; set; }
@@ -20,22 +20,23 @@ namespace virtual_pet.Core.Render
         ConsoleColor DefaultBackgroundColor = ConsoleColor.Black;
         ConsoleColor DefaultForegroundColor = ConsoleColor.White;
 
-        uint line = 0;
+        public int Line { get; private set; } = 0;
+        public int Cell{ get; private set; } = 0;
 
         Pixel[,] buffer = null;
 
-        public Buffer(uint x, uint y, uint width, uint height)
+        public Buffer(int x, int y, int width, int height)
         {
             SetLocation(x, y);
-            InitBuffer(width, height);
+            SetSize(width, height);
         }
 
-        public void SetLocation(uint x, uint y) {
+        public void SetLocation(int x, int y) {
             this.X = x;
             this.Y = y;
         }
 
-        public void InitBuffer(uint width, uint height) {
+        public void SetSize(int width, int height) {
             this.buffer = new Pixel[width, height];
             this.Width = width;
             this.Height = height;
@@ -50,7 +51,8 @@ namespace virtual_pet.Core.Render
 
         public void Clear()
         {
-            line = 0;
+            Line = 0;
+            Cell = 0;
             for (int i = 0; i < Width; i++)
             {
                 for (int j = 0; j < Height; j++)
@@ -60,42 +62,94 @@ namespace virtual_pet.Core.Render
             }
         }
 
-        public void WriteLine(string str)
-        {
-            for (int i = 0; i < str.Length && i < Width; i++)
+        public void Write(string str) {
+            for (int i = 0; i < str.Length && Cell < Width && Line < Height; i++)
             {
                 if (str[i] == '\n')
                 {
-                    line++;
+                    Line++;
+                    Cell = 0;
                     continue;
                 }
-                buffer[i, line].Character = str[i];
-                buffer[i, line].Background = BackgroundColor;
-                buffer[i, line].Foreground = ForegroundColor;
+                buffer[Cell, Line].Character = str[i];
+                buffer[Cell, Line].Background = BackgroundColor;
+                buffer[Cell, Line].Foreground = ForegroundColor;
+                Cell++;
             }
-            line++;
         }
 
-        public void WriteLine(string str, ConsoleColor back, ConsoleColor fore)
-        {
-            for (int i = 0; i < str.Length && i < Width; i++)
+        public void Write(string str, ConsoleColor back, ConsoleColor fore, bool keepColorChange = false) {
+            if (keepColorChange)
+            {
+                this.BackgroundColor = back;
+                this.ForegroundColor = fore;
+            }
+            for (int i = 0; i < str.Length && Cell < Width && Line < Height; i++)
             {
                 if (str[i] == '\n')
                 {
-                    line++;
+                    Line++;
+                    Cell = 0;
                     continue;
                 }
-                buffer[i, line].Character = str[i];
-                buffer[i, line].Background = back;
-                buffer[i, line].Foreground = fore;
+                buffer[Cell, Line].Character = str[i];
+                buffer[Cell, Line].Background = back;
+                buffer[Cell, Line].Foreground = fore;
+                Cell++;
             }
-            line++;
         }
+
+        public void WriteLine(string str)
+        {
+            for (int i = 0; i < str.Length && Cell < Width && Line < Height; i++)
+            {
+                if (str[i] == '\n')
+                {
+                    Line++;
+                    Cell = 0;
+                    continue;
+                }
+                buffer[Cell, Line].Character = str[i];
+                buffer[Cell, Line].Background = BackgroundColor;
+                buffer[Cell, Line].Foreground = ForegroundColor;
+                Cell++;
+            }
+            Line++;
+            Cell = 0;
+        }
+
+        
 
         public void ResetColor()
         {
             this.BackgroundColor = DefaultBackgroundColor;
             this.ForegroundColor = DefaultForegroundColor;
+        }public void WriteLine(string str, ConsoleColor back, ConsoleColor fore, bool keepColorChange = false)
+        {
+            if (keepColorChange)
+            {
+                this.BackgroundColor = back;
+                this.ForegroundColor = fore;
+            }
+            for (int i = 0; i < str.Length && Cell < Width && Line < Height; i++)
+            {
+                if (str[i] == '\n')
+                {
+                    Line++;
+                    Cell = 0;
+                    continue;
+                }
+                buffer[Cell, Line].Character = str[i];
+                buffer[Cell, Line].Background = back;
+                buffer[Cell, Line].Foreground = fore;
+                Cell ++;
+            }
+            Line++;
+            Cell = 0;
+        }
+        public void WriteLine() {
+            Line++;
+            Cell = 0;
         }
 
         public Pixel this[int x, int y]
