@@ -1,27 +1,38 @@
 ﻿using virtual_pet.Core.Render;
 using virtual_pet.Core.Input;
+using System.Reflection.Metadata.Ecma335;
+using System;
 namespace virtual_pet.Core.Utils
 {
-    public class ConsoleMenuBuffered : IInputListener
+    public class ConsoleMenuBuffered : IInputListener, IDisplayable
     {
         public delegate void ItemSelected(object sender, int selectedItemIndex);
         public event ItemSelected onItemSelected;
 
+        private OptionStripItem[] optionStripItems =
+        {
+            new OptionStripItem("Select", ' ', ConsoleKey.Enter),
+            new OptionStripItem("Up", ' ', ConsoleKey.UpArrow),
+            new OptionStripItem("Down", ' ', ConsoleKey.DownArrow)
+        };
 
+        private OptionStrip optionStrip;
         private List<string> menuItems;
         private int selectedItemIndex;
+        private int itemsPerPage = 6;
+        private int currentPage = 0;
 
-        private Render.Buffer buffer;
-        public ConsoleMenuBuffered(Render.Buffer buffer, ItemSelected onItemSelected, List<string> items)
-        {
-            this.buffer = buffer;
+        //public Render.Buffer Buffer { get; set; }
+
+        public ConsoleMenuBuffered(ItemSelected onItemSelected, List<string> items) { 
+            optionStrip = new OptionStrip(optionStripItems);
+            //this.Buffer = buffer;
             this.onItemSelected = onItemSelected;
             menuItems = items;
             selectedItemIndex = 0;
         }
 
         public void KeyPressed(ConsoleKeyInfo key) {
-            buffer.Clear();
             switch (key.Key)
             {
                 case ConsoleKey.UpArrow:
@@ -33,63 +44,27 @@ namespace virtual_pet.Core.Utils
                     break;
                 case ConsoleKey.Enter:
                     onItemSelected?.Invoke(this, selectedItemIndex);
-                    break; 
+                    break;
+                case ConsoleKey.Escape:
+                    onItemSelected?.Invoke(this, -1);
+                    break;
                 default: break;
             }
         }
 
-        public void ShowMenu()
-        {
-            ConsoleKeyInfo key;
-            do
-            {
-                
-                DisplayHeader();
-                DisplayMenu();
-                Renderer.Render();
-                key = Console.ReadKey();
 
-                switch (key.Key)
-                {
-                    case ConsoleKey.UpArrow:
-                        MoveSelectionUp();
-                        break;
+        public OptionStrip? GetOptionStrip() => optionStrip;
 
-                    case ConsoleKey.DownArrow:
-                        MoveSelectionDown();
-                        break;
-                }
-                
-            } while (key.Key != ConsoleKey.Enter);
-
-            //return selectedItemIndex;
-        }
-
-        public void Display() {
-            DisplayMenu();
-        }
         public void Display(Render.Buffer buffer) {
-            this.buffer = buffer;
-            DisplayMenu();
-        }
-
-        private void DisplayHeader()
-        {
-            buffer.WriteLine("Welcome to Virtual Pet");
-            buffer.WriteLine("----------------------------\n");
-        }
-
-        private void DisplayMenu()
-        {
-            for (int i = 0; i < menuItems.Count; i++)
+            for (int i = currentPage * itemsPerPage; i < currentPage * itemsPerPage + itemsPerPage && i < menuItems.Count; i++)
             {
                 if (i == selectedItemIndex)
                 {
                     buffer.ForegroundColor = ConsoleColor.Black;
-                    buffer.BackgroundColor = ConsoleColor.White;
+                    buffer.BackgroundColor = ConsoleColor.Gray;
                 }
 
-                buffer.WriteLine(menuItems[i]);
+                buffer.WriteLine(" " + menuItems[i]);
 
                 buffer.ResetColor();
             }
@@ -98,11 +73,13 @@ namespace virtual_pet.Core.Utils
         private void MoveSelectionUp()
         {
             selectedItemIndex = (selectedItemIndex - 1 + menuItems.Count) % menuItems.Count;
+            currentPage = selectedItemIndex / itemsPerPage;
         }
 
         private void MoveSelectionDown()
         {
             selectedItemIndex = (selectedItemIndex + 1) % menuItems.Count;
+            currentPage = selectedItemIndex / itemsPerPage;
         }
     }
 }
