@@ -1,7 +1,8 @@
 ﻿using System.Text.RegularExpressions;
+using virtual_pet.Core.Render;
 
 namespace virtual_pet.Core.Input {
-    public class TextInput : IInputListener {
+    public class TextInput : IInputListener, IDisplayable{
 
         public delegate void OnSubmit(object sender, string text);
         public event OnSubmit onSubmit;
@@ -21,6 +22,10 @@ namespace virtual_pet.Core.Input {
             get { return customRegex; }
             set { customRegex = value; flags |= CUSTOMREGEX; }
         }
+
+
+        int displayColumn = 0;
+        int column = 0;
 
         private string regex = "";
         private int flags = 0;
@@ -67,7 +72,7 @@ namespace virtual_pet.Core.Input {
             s += AllowUppercase ?   "(?<upper>[A-Z])|" : "";
             s += AllowDigits ?      "(?<number>[0-9])|" : "";
             s += AllowSymbols ?     "(?<symbol>[!-/:-@\\[-`{-~])|" : "";//the last | is for consistency
-            s += AllowWhitespace ?  "?<whitespace>[\\s])|" : "";
+            s += AllowWhitespace ?  "(?<whitespace>[\\s])|" : "";
             if(string.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s))
             {
                 regex = "";
@@ -79,7 +84,7 @@ namespace virtual_pet.Core.Input {
         
 
         public bool IsReady = false;
-        string text = "";
+        public string Text = "";
 
         public TextInput(OnSubmit onSubmit) {
             this.onSubmit = onSubmit;
@@ -128,24 +133,82 @@ namespace virtual_pet.Core.Input {
             return new TextInput(onSubmit, customRegex, flags);
         }
 
+        public void Display(Render.Buffer buffer) {
+            if (Text.Length - column < buffer.Width)
+            {
+                if(column < displayColumn)
+                {
+                    displayColumn = Math.Max(0, column - 4); 
+                }
+                else
+                {
+                    if(column > displayColumn + buffer.Width)
+                    {
+                        displayColumn += buffer.Width;
+                    }
+                }
+            }
+            for(int i=0;  i< buffer.Width && displayColumn + i < Text.Length;  i++)
+            {
+                if((displayColumn + i) == column)
+                {
+                    buffer.Write(Text[displayColumn + i].ToString(), ConsoleColor.White, ConsoleColor.Black);
+                    continue;
+                }
+
+                buffer.Write(Text[displayColumn + i].ToString(), ConsoleColor.Black, ConsoleColor.White);
+            }
+        }
+
+        public bool RequieresPassAll() => true;
+
         public void KeyPressed(ConsoleKeyInfo key) {
-            switch(key.Key)
+            switch (key.Key)
             {
                 case ConsoleKey.Enter:
-                    IsReady = true;
+                    onSubmit?.Invoke(this, Text);
                     return;
+                case ConsoleKey.Backspace:
+                    if (column > 0)
+                    {
+                        Text = Text.Remove(column-1, 1);
+                        column--;
+                    }
+                    break;
+                case ConsoleKey.Delete:
+                    if (column >= 0 && Text.Length > column)
+                    {
+                        Text = Text.Remove(column, 1);
+                    }
+                    break;
+                    
+                case ConsoleKey.LeftArrow:
+                    column  = Math.Max(0, column-1);
+                    break;
+                case ConsoleKey.RightArrow:
+                    column = Math.Min(Text.Length, column + 1);
+                    break;
 
                 default:
-                    if(!AllowCustomRegex)
+                    if (!AllowCustomRegex)
                     {
                         if (Regex.IsMatch(key.KeyChar.ToString(), regex))
-                            text += key.KeyChar;
+                        {
+                            Text = Text.Insert(column, key.KeyChar.ToString());
+                            column++;
+                        }
                         break;
                     }
                     if (Regex.IsMatch(key.KeyChar.ToString(), customRegex))
-                        text += key.KeyChar;
+                    {
+                        Text = Text.Insert(column, key.KeyChar.ToString());
+                        column++;
+                    }
                     else if (Regex.IsMatch(key.KeyChar.ToString(), regex))
-                        text += key.KeyChar;
+                    {
+                        Text = Text.Insert(column, key.KeyChar.ToString());
+                        column++;
+                    }
                     break;
             }
         }

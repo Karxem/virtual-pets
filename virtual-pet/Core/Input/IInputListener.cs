@@ -9,5 +9,6 @@ namespace virtual_pet.Core.Input {
     public interface IInputListener {
         public void KeyPressed(ConsoleKeyInfo info);
         public OptionStrip? GetOptionStrip() => null;
+        public bool RequieresPassAll() => false;
     }
 }
