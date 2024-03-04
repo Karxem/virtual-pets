@@ -34,6 +34,31 @@ namespace virtual_pet.Core.Entities.Common
             Energy.Value += 100;
             Thirst.Value += 100;
             Hunger.Value += 100;
+            Level.Value += 1;
+        }
+
+        public void GainExperience(double amount)
+        {
+            Experience.Value += amount;
+            Console.WriteLine($"{PetName} gained {amount} experience.");
+
+            // Check if the pet should level up
+            CheckLevelUp();
+        }
+
+        private void CheckLevelUp()
+        {
+            double lvlUpThreshhold = Level.Value * 100;
+
+            if (Experience.Value < lvlUpThreshhold)
+            {
+                return;
+            }
+
+            Level.Value++;
+            Experience.Value -= lvlUpThreshhold;
+
+            Console.WriteLine($"{PetName} leveled up to Level {Level.Value}!");
         }
 
         // TODO: We should add dynamic handling here with a random value inside a range, since hard coded values are meh
