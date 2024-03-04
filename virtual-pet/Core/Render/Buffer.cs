@@ -21,7 +21,7 @@ namespace virtual_pet.Core.Render
         ConsoleColor DefaultForegroundColor = ConsoleColor.White;
 
         public int Line { get; private set; } = 0;
-        public int Cell{ get; private set; } = 0;
+        public int Cell { get; private set; } = 0;
 
         Pixel[,] buffer = null;
 
@@ -35,6 +35,8 @@ namespace virtual_pet.Core.Render
             this.X = x;
             this.Y = y;
         }
+
+        
 
         public void SetSize(int width, int height) {
             this.buffer = new Pixel[width, height];
@@ -124,7 +126,9 @@ namespace virtual_pet.Core.Render
         {
             this.BackgroundColor = DefaultBackgroundColor;
             this.ForegroundColor = DefaultForegroundColor;
-        }public void WriteLine(string str, ConsoleColor back, ConsoleColor fore, bool keepColorChange = false)
+        }
+        
+        public void WriteLine(string str, ConsoleColor back, ConsoleColor fore, bool keepColorChange = false)
         {
             if (keepColorChange)
             {

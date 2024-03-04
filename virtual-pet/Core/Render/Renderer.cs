@@ -9,10 +9,10 @@ namespace virtual_pet.Core.Render
     public class Renderer
     {
 
-        public static Buffer MainBuffer = new Buffer(0, 0, 90, 36);
-        public static Buffer PlayBuffer = new Buffer(0, 0, 90, 28);
-        public static Buffer MenuBuffer = new Buffer(0, 28, 90, 6);
-        public static Buffer OptionStripBuffer = new Buffer(0, 32, 90, 2);
+        public static Buffer MainBuffer = new Buffer(0, 0, 90, 24);
+        public static Buffer PlayBuffer = new Buffer(0, 0, 90, 16);
+        public static Buffer MenuBuffer = new Buffer(0, 16, 90, 6);
+        public static Buffer OptionStripBuffer = new Buffer(0, 22, 90, 2);
 
         public static double PlayBufferHeightPct { get; set; } = 0.7;
         public static double MenuBufferHeightPct { get; set; } = 0.2;
@@ -35,7 +35,14 @@ namespace virtual_pet.Core.Render
 
         }
 
+        static  StreamWriter writer = new StreamWriter(Console.OpenStandardOutput());
+
+
         public static List<Buffer> buffers = new();
+
+        public void Init() {
+            
+        }
 
         public static void FitToScreen() {
             int w = Console.BufferWidth;
@@ -82,31 +89,31 @@ namespace virtual_pet.Core.Render
             }
         }
 
-        /*
-         * performance increase
-         */
+        
         public static void Render()
         {
             
             StringBuilder builder = new StringBuilder();
             //builder.Clear();
-
+            //builder.Append("\u001b[2J");//\u001b[0;0H");
             FillBuffers();
-            for (int line = 0; line < MainBuffer.Height; line++)
+            for (int line = 0; line < MainBuffer.Height && line < Console.WindowHeight; line++)
             {
-                for (int i = 0; i < MainBuffer.Width; i++)
+                for (int i = 0; i < MainBuffer.Width && i < Console.WindowWidth; i++)
                 {
                     builder.Append(ColorCodes.GetColor(MainBuffer[i, line].Background, MainBuffer[i, line].Foreground) + MainBuffer[i, line].Character);
+                    //builder.Append(MainBuffer[i, line].Character);
                 }
                 builder.AppendLine();
             }
-            //Thread.Sleep(300);
-            //Console.Out.Flush();
-            Console.Clear();
-            //Thread.Sleep(200);
-            Console.Write(builder);
-            //Console.WriteLine("Builder length: "+ builder.Length);
-            //Console.WriteLine("Buffer Width: "+MainBuffer.Width+ "Height: "+ MainBuffer.Height);
+            //writer.Clear();
+           // Console.Clear();
+            //writer.WriteLine("\u001b[2J");4
+            writer.Write("\u001b[0;0H");
+            writer.Flush();
+            writer.Write(builder);
+            writer.Flush();
+            
         }
     }
 }
