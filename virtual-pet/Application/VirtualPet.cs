@@ -1,7 +1,6 @@
 ﻿using virtual_pet.Core;
 using virtual_pet.Core.Entities.Common;
 using virtual_pet.Core.Managers;
-using virtual_pet.Core.Models;
 using virtual_pet.Core.Utils;
 
 namespace virtual_pet.Application
@@ -15,6 +14,7 @@ namespace virtual_pet.Application
             "Show Pet Overview",
             "Fill all pet stats",
             "Add a pet",
+            "Gain experience",
             "Exit"
             };
 
@@ -67,7 +67,6 @@ namespace virtual_pet.Application
 
                             petManager.SavePet(petInstance);
 
-                            Console.Clear();
                             Console.WriteLine($"{pet.Name} is filled up again!");
                         }
                         break;
@@ -85,6 +84,17 @@ namespace virtual_pet.Application
                         Console.WriteLine($"Your new pet {petName} was added");
                         break;
                     case 3:
+                        Console.Clear();
+
+                        foreach (var pet in pets)
+                        {
+                            var petInstance = petManager.LoadPet(pet.Name);
+                            petInstance.GainExperience(100.0);
+
+                            petManager.SavePet(petInstance);
+                        }
+                        break;
+                    case 4:
                         return;
                     default:
                         Console.WriteLine("An error occured");
