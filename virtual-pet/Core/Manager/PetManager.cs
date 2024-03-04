@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Timers;
 using virtual_pet.Core.Entities.Common;
+using virtual_pet.Core.Entities.Pets;
 using virtual_pet.Core.Models;
 
 
@@ -37,8 +38,12 @@ namespace virtual_pet.Core.Managers
                 type: pet.GetPetType(),
                 health: pet.Health.Value,
                 energy: pet.Energy.Value,
+                attack: pet.Attack.Value,
+                defense: pet.Defense.Value,
                 hunger: pet.Hunger.Value,
-                thirst: pet.Thirst.Value
+                thirst: pet.Thirst.Value,
+                exp: pet.Experience.Value,
+                level: pet.Level.Value
             );
 
             // Check if there is an existing pet with the same name
@@ -52,8 +57,12 @@ namespace virtual_pet.Core.Managers
             {
                 existingPet.Health = petModel.Health;
                 existingPet.Energy = petModel.Energy;
+                existingPet.Attack = petModel.Attack;
+                existingPet.Defense = petModel.Defense;
                 existingPet.Hunger = petModel.Hunger;
                 existingPet.Thirst = petModel.Thirst;
+                existingPet.Experience = petModel.Experience;
+                existingPet.Level = petModel.Level;
             }
 
             SavePetsToFile();
@@ -74,8 +83,12 @@ namespace virtual_pet.Core.Managers
             pet.PetName = loadedPetModel.Name;
             pet.Health.Value = loadedPetModel.Health;
             pet.Energy.Value = loadedPetModel.Energy;
+            pet.Attack.Value = loadedPetModel.Attack;
+            pet.Defense.Value = loadedPetModel.Defense;
             pet.Hunger.Value = loadedPetModel.Hunger;
             pet.Thirst.Value = loadedPetModel.Thirst;
+            pet.Experience.Value = loadedPetModel.Experience;
+            pet.Level.Value = loadedPetModel.Level;
 
             return pet;
         }
@@ -136,6 +149,8 @@ namespace virtual_pet.Core.Managers
             {
                 case "Lenora":
                     return new Lenora();
+                case "Flololo":
+                    return new Flololo();
                 default:
                     throw new ArgumentException("Invalid pet type");
             }
