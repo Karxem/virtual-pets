@@ -1,26 +1,43 @@
-﻿using System.Numerics;
+﻿using System;
 
-namespace virtual_pet.Core.Models {
-    // TODO: Add a leveling handler to enhance stats over time
-    // TODO: Remove abstract methods, we need to keep track of functions inside Base classes and models
+namespace virtual_pet.Core.Models
+{
     internal class StatModel
     {
-        private double _Value = 0.0;
-        private double _MinValue = 0.0;
-        private double _MaxValue = 0.0;
+        private double _Value;
+        private double _MinValue;
+        private double _MaxValue;
 
-        private int _Level = 0;
-        private int _MaxLevel = 10;
-        private int _LevelUpThreshhold = 200;
-
-        // We should make this abstract maybe
-        private double[] _LevelMaxIncrese =
-        { 0, 2.5, 8.0,  15.0, 20.0, 25.0, 50.0, 70.0, 90.0, 100.0 };
+        public StatModel(double minValue, double maxValue)
+        {
+            _MinValue = minValue;
+            _MaxValue = maxValue;
+            _Value = Math.Min(_MaxValue, Math.Max(_MinValue, 0.0));
+        }
 
         public double Value
         {
             get { return _Value; }
-            set { _Value = Math.Min(100, Math.Max(0, value)); }
+            set { _Value = Math.Min(_MaxValue, Math.Max(_MinValue, value)); }
+        }
+
+        public double MinValue
+        {
+            get { return _MinValue; }
+            set { _MinValue = value; }
+        }
+
+        public double MaxValue
+        {
+            get { return _MaxValue; }
+            set { _MaxValue = value; }
+        }
+
+        public void SetRange(double minValue, double maxValue)
+        {
+            _MinValue = minValue;
+            _MaxValue = maxValue;
+            Value = _Value;
         }
 
         public static implicit operator double(StatModel stat) { return stat.Value; }
@@ -34,6 +51,5 @@ namespace virtual_pet.Core.Models {
         {
             return stat.Value - value;
         }
-
     }
 }
