@@ -5,7 +5,7 @@ on:
     types:
       - closed
     branches:
-      - develop
+      - main
 
 jobs:
   delete_branch_on_merge:
@@ -20,4 +20,3 @@ jobs:
         run: |
           git push origin --delete ${{ github.head_ref }}
           echo "🎉 Branch ${{ github.head_ref }} was automatically deleted after merge."
-          
