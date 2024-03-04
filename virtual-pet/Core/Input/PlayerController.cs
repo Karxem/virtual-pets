@@ -44,4 +44,5 @@ namespace virtual_pet.Core.Input {
             return key;
         }
     }
+
 }

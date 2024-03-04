@@ -43,7 +43,7 @@ namespace virtual_pet.Application {
         static Stack<ConsoleMenu> menus = new Stack<ConsoleMenu>();
         static Stack<IInputListener> inputListeners = new Stack<IInputListener>();
 
-        static ConsoleMenu currentMenu;
+        static ConsoleMenu currentMenu ;
         static OptionStrip? currentOtionStrip;
 
         static PetManager petManager = new PetManager();
@@ -55,14 +55,19 @@ namespace virtual_pet.Application {
         static bool running = true;
 
         public static void PassInput(IInputListener listener) {
+            if(controller.Listener != null)
+                controller.Listener.IsActive = false;
             inputListeners.Push(controller.Listener);
             controller.Listener = listener;
+            listener.IsActive = true;
             currentOtionStrip = listener.GetOptionStrip();
         }
 
         public static void PopInput() {
+            controller.Listener.IsActive = false;
             controller.Listener = inputListeners.Pop();
-            currentOtionStrip = controller.Listener.GetOptionStrip();
+            controller.Listener.IsActive = true;
+            currentOtionStrip = controller.Listener?.GetOptionStrip();
         }
 
         public static void OpenMenu(ConsoleMenu consoleMenu) {
@@ -78,7 +83,8 @@ namespace virtual_pet.Application {
 
 
         static void Main() {
-            
+
+            inputListeners.Push(new MainInputListener());
             Console.CursorVisible = false;
             debugMenu.CreateClickItem("Debug Color Print");
             debugTextInput = debugMenu.CreateTextInputItem(onDebugTextInput, "Debug Text Input Item").Input;
@@ -200,6 +206,8 @@ namespace virtual_pet.Application {
 
         public class ChangeSizeListener : IInputListener {
 
+            public bool IsActive { get; set; }
+
             OptionStrip optionStrip = new OptionStrip();
 
             public void KeyPressed(ConsoleKeyInfo key) {
@@ -236,6 +244,8 @@ namespace virtual_pet.Application {
         }
         
         public class MainInputListener : IInputListener {
+
+            public bool IsActive { get; set; }
             public void KeyPressed(ConsoleKeyInfo key) {
                 switch (key.Key)
                 {
