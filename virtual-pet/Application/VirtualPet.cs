@@ -22,26 +22,28 @@ namespace virtual_pet.Application {
             "7",
             "8"
             };
-        static ConsoleMenuBuffered consoleMenu = new ConsoleMenuBuffered( onItemSelected, menuItems);
+        static ConsoleMenu consoleMenu = new ConsoleMenu( onItemSelected, menuItems);
 
         static List<string> mainMenuItems = new List<string>
             {
             "Change Interface Size",
             "Close Game"
             };
-        static ConsoleMenuBuffered mainMenu = new ConsoleMenuBuffered( onMainItemSelected, mainMenuItems);
+        static ConsoleMenu mainMenu = new ConsoleMenu( onMainItemSelected, mainMenuItems);
 
 
-        static List<string> debugMenuItems = new List<string>
+        static List<MenuItemBase> debugMenuItems = new List<MenuItemBase>
             {
-            "Debug Formatted Print"
+            
             };
-        static ConsoleMenuBuffered debugMenu = new ConsoleMenuBuffered( onDebugItemSelected, debugMenuItems);
+        static ConsoleMenu debugMenu = new ConsoleMenu( onDebugItemSelected, debugMenuItems);
 
-        static Stack<ConsoleMenuBuffered> menus = new Stack<ConsoleMenuBuffered>();
+        static TextInput debugTextInput;//= TextInput.GetTextNumberInput(onDebugTextInput);
+
+        static Stack<ConsoleMenu> menus = new Stack<ConsoleMenu>();
         static Stack<IInputListener> inputListeners = new Stack<IInputListener>();
 
-        static ConsoleMenuBuffered currentMenu;
+        static ConsoleMenu currentMenu;
         static OptionStrip? currentOtionStrip;
 
         static PetManager petManager = new PetManager();
@@ -63,7 +65,7 @@ namespace virtual_pet.Application {
             currentOtionStrip = controller.Listener.GetOptionStrip();
         }
 
-        public static void OpenMenu(ConsoleMenuBuffered consoleMenu) {
+        public static void OpenMenu(ConsoleMenu consoleMenu) {
             menus.Push(currentMenu);
             currentMenu = consoleMenu;
             PassInput(consoleMenu);
@@ -76,7 +78,10 @@ namespace virtual_pet.Application {
 
 
         static void Main() {
+            
             Console.CursorVisible = false;
+            debugMenu.CreateClickItem("Debug Color Print");
+            debugTextInput = debugMenu.CreateTextInputItem(onDebugTextInput, "Debug Text Input Item").Input;
 
 
             //int selectedIndex = consoleMenu.ShowMenu();
@@ -89,7 +94,7 @@ namespace virtual_pet.Application {
                 Renderer.ClearBuffers();
                 //fetch input
                 controller.Tick();
-                Renderer.FitToScreen();
+                //Renderer.FitToScreen();
                 //
                 foreach (IDisplayable d in displayables)
                 {
@@ -99,7 +104,7 @@ namespace virtual_pet.Application {
                 currentOtionStrip?.Display(Renderer.OptionStripBuffer);
                 //render the scene
                 Renderer.Render();
-                Thread.Sleep(60);
+                Thread.Sleep(30);
             }
 
             Console.WriteLine("Exiting...");
@@ -169,6 +174,9 @@ namespace virtual_pet.Application {
                     else
                         displayables.Remove(debugPrint);
                     break;
+                case 1:
+                    PassInput(debugTextInput);
+                    break;
                 default: break;
             }
             
@@ -221,6 +229,10 @@ namespace virtual_pet.Application {
             }
 
             public OptionStrip? GetOtptionStrip() => optionStrip;
+        }
+
+        public static void onDebugTextInput(object sender, string text) {
+            PopInput();
         }
         
         public class MainInputListener : IInputListener {
