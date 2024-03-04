@@ -34,16 +34,32 @@ namespace virtual_pet.Application
                 switch (selectedIndex)
                 {
                     case 0:
-                        Console.Clear();
-                        Console.WriteLine("Your Pets:");
-                        Console.WriteLine("-------------------------------------------------------");
-
-                        foreach (var pet in pets)
+                        if (pets.Count == 0)
                         {
-                            Console.WriteLine($"Name: {pet.Name}, Health: {pet.Health}, Energy: {pet.Energy}, Hunger: {pet.Hunger}, Thirst: {pet.Thirst}");
+                            Console.Clear();
+                            Console.WriteLine("You dont have any Pets");
+                            Console.WriteLine("-------------------------------------------------------");
                         }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Your Pets:");
+                            Console.WriteLine("-------------------------------------------------------");
+
+                            foreach (var pet in pets)
+                            {
+                                Console.WriteLine($"Name: {pet.Name}, Health: {pet.Health}, Energy: {pet.Energy}, Hunger: {pet.Hunger}, Thirst: {pet.Thirst}");
+                            }
+                        }
+
                         break;
                     case 1:
+                        if (pets.Count == 0)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("You dont have any Pets");
+                            Console.WriteLine("-------------------------------------------------------");
+                        }
                         foreach (var pet in pets)
                         {
                             var petInstance = petManager.LoadPet(pet.Name);
@@ -62,7 +78,7 @@ namespace virtual_pet.Application
                         string petName = Console.ReadLine();
 
                         PetBase newPet = new Lenora();
-                        newPet.Name = petName;
+                        newPet.PetName = petName;
                         newPet.FillAll();
                         petManager.SavePet(newPet);
 

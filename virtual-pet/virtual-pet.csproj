@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Assets\**" />
+    <EmbeddedResource Remove="Assets\**" />
+    <None Remove="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Core\" />
     <None Remove="Core\Entities\" />
     <None Remove="Core\Manager\" />
@@ -17,7 +23,6 @@
   <ItemGroup>
     <Folder Include="Core\Manager\" />
     <Folder Include="Application\" />
-    <Folder Include="Assets\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
