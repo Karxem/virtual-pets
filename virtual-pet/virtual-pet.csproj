@@ -19,10 +19,15 @@
     <None Remove="Core\Entities\" />
     <None Remove="Core\Manager\" />
     <None Remove="Application\" />
+    <None Remove="Core\Entities\Pets\" />
+    <None Remove="Core\Levels\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Manager\" />
     <Folder Include="Application\" />
+    <Folder Include="Assets\" />
+    <Folder Include="Core\Entities\Pets\" />
+    <Folder Include="Core\Levels\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

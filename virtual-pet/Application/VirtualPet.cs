@@ -1,5 +1,7 @@
 ﻿using virtual_pet.Core;
+using virtual_pet.Core.Entities.common;
 using virtual_pet.Core.Entities.Common;
+using virtual_pet.Core.Levels;
 using virtual_pet.Core.Managers;
 using virtual_pet.Core.Utils;
 
@@ -15,6 +17,7 @@ namespace virtual_pet.Application
             "Fill all pet stats",
             "Add a pet",
             "Gain experience",
+            "Take a walk",
             "Exit"
             };
 
@@ -42,14 +45,15 @@ namespace virtual_pet.Application
                         }
                         else
                         {
-                            Console.Clear();
-                            Console.WriteLine("Your Pets:");
-                            Console.WriteLine("-------------------------------------------------------");
-
-                            foreach (var pet in pets)
-                            {
-                                Console.WriteLine($"Name: {pet.Name}, Health: {pet.Health}, Energy: {pet.Energy}, Hunger: {pet.Hunger}, Thirst: {pet.Thirst}");
-                            }
+                        Console.WriteLine("Your Pets:");
+                        Console.WriteLine("-------------------------------------------------------");
+                        
+                        foreach (var pet in pets)
+                        {
+                            Console.WriteLine($"⎡ Name: {pet.Name}, Type: {pet.Type}, Level: {pet.Level}");
+                            Console.WriteLine($"⎢ Energy: {pet.Energy}, Attack: {pet.Attack}, Defense: {pet.Defense}");
+                            Console.WriteLine($"⎣ Health: { pet.Health}, Hunger: { pet.Hunger}, Thirst: { pet.Thirst}");
+                        }
                         }
 
                         break;
@@ -95,6 +99,13 @@ namespace virtual_pet.Application
                         }
                         break;
                     case 4:
+                        Console.Clear();
+
+                        LevelBase level = new TestLevel();
+
+                        level.StartFight(pets[0].Name);
+                        break;
+                    case 5:
                         return;
                     default:
                         Console.WriteLine("An error occured");
