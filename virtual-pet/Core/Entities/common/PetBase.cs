@@ -5,11 +5,19 @@ namespace virtual_pet.Core.Entities.Common
 {
     internal abstract class PetBase
     {
-        public string PetName {  get; set; }
-        public StatModel Health = new(0, 100);
-        public StatModel Energy = new(0, 100);
-        public StatModel Hunger = new(0, 100);
-        public StatModel Thirst = new(0, 100);
+        public string PetName { get; set; }
+        public StatModel Health = new StatModel(0, 100);
+        public StatModel Energy = new StatModel(0, 100);
+        public StatModel Attack = new StatModel(0, 100);
+        public StatModel Defense = new StatModel(0, 100);
+
+        // Basicneed stat properties
+        public StatModel Hunger = new StatModel(0, 100);
+        public StatModel Thirst = new StatModel(0, 100);
+
+        // Level stat properties
+        public StatModel Experience = new StatModel(0, 10000);
+        public StatModel Level = new StatModel(0, 100);
 
         public void Heal(double amount)
         {
@@ -34,6 +42,8 @@ namespace virtual_pet.Core.Entities.Common
             Energy.Value += 100;
             Thirst.Value += 100;
             Hunger.Value += 100;
+            Attack.Value += 10;
+            Defense.Value += 5;
             Level.Value += 1;
         }
 
@@ -61,7 +71,6 @@ namespace virtual_pet.Core.Entities.Common
             Console.WriteLine($"{PetName} leveled up to Level {Level.Value}!");
         }
 
-        // TODO: We should add dynamic handling here with a random value inside a range, since hard coded values are meh
         public void Tick()
         {
             Random random = new Random();
