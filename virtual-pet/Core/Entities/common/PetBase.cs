@@ -36,6 +36,17 @@ namespace virtual_pet.Core.Entities.Common
             Hunger.Value += amount;
         }
 
+        public void AddExp(double amount)
+        {
+            Experience.SetRange(0, 1000);
+            Experience.Value += amount;
+        }
+
+        public void TakeDamage(double amount)
+        {
+            Health.Value -= amount;
+        }
+
         public void FillAll()
         {
             Health.Value += 100;
@@ -74,11 +85,24 @@ namespace virtual_pet.Core.Entities.Common
         public void Tick()
         {
             Random random = new Random();
-
             Health.Value -= random.Next(0, 10);
             Energy.Value -= random.Next(0, 10);
             Hunger.Value -= random.Next(0, 10);
             Thirst.Value -= random.Next(0, 10);
+            Experience.Value -= random.Next(0, 5);
+        }
+
+        public bool IsAlive()
+        {
+            switch (Health.Value)
+            {        
+                case > 0.0:
+                    return true;
+                case <= 0.0:
+                    return false;
+                default:
+                    return true;
+            }
         }
 
         public string GetInfo()
