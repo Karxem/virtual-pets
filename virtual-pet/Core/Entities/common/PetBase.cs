@@ -5,15 +5,12 @@ namespace virtual_pet.Core.Entities.Common
 {
     internal abstract class PetBase
     {
-        #region PROPERTYS
-        public string Name {  get; set; }
+        public string PetName {  get; set; }
         public StatModel Health = new();
         public StatModel Energy = new();
         public StatModel Hunger = new();
         public StatModel Thirst = new();
-        #endregion PROPERTYS
 
-        #region METH
         public void Heal(double amount)
         {
             Health.Value += amount;
@@ -42,10 +39,12 @@ namespace virtual_pet.Core.Entities.Common
         // TODO: We should add dynamic handling here with a random value inside a range, since hard coded values are meh
         public void Tick()
         {
-            Health.Value -= 2.0;
-            Energy.Value -= 4.0;
-            Hunger.Value -= 5.0;
-            Thirst.Value -= 7.0;
+            Random random = new Random();
+
+            Health.Value -= random.Next(0, 10);
+            Energy.Value -= random.Next(0, 10);
+            Hunger.Value -= random.Next(0, 10);
+            Thirst.Value -= random.Next(0, 10);
         }
 
         public string GetInfo()
@@ -55,6 +54,5 @@ namespace virtual_pet.Core.Entities.Common
 
         // Abstract method to get the pet type
         public abstract string GetPetType();
-        #endregion METH
     }
 }
