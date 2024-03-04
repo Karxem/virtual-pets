@@ -71,7 +71,7 @@ namespace virtual_pet.Application
 
                         validinput = false;
                         PetBase newPet = new Lenora();
-                        newPet.Name = petName; 
+                        newPet.PetName = petName; 
                         newPet.FillAll();
                         petManager.SavePet(newPet);
                         

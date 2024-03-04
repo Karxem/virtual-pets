@@ -30,10 +30,11 @@ namespace virtual_pet.Core.Managers
             string fileName = "pets.json";
             return Path.Combine(myAppFolder, fileName);
         }
+
         public void SavePet(PetBase pet)
         {
             PetModel petModel = new PetModel(
-                name: pet.Name,
+                name: pet.PetName,
                 type: pet.GetPetType(),
                 health: pet.Health.Value,
                 energy: pet.Energy.Value,
@@ -47,19 +48,19 @@ namespace virtual_pet.Core.Managers
             if (existingPet == null)
             {
                 petModels.Add(petModel);
+                SavePetsToFile();
+
+                return;
             }
-            else
-            {
-                existingPet.Health = petModel.Health;
-                existingPet.Energy = petModel.Energy;
-                existingPet.Hunger = petModel.Hunger;
-                existingPet.Thirst = petModel.Thirst;
-            }
+
+            existingPet.Health = petModel.Health;
+            existingPet.Energy = petModel.Energy;
+            existingPet.Hunger = petModel.Hunger;
+            existingPet.Thirst = petModel.Thirst;
 
             SavePetsToFile();
         }
 
-        // Load a pet from file based on its name
         public PetBase LoadPet(string name)
         {
             var loadedPetModel = petModels.Find(p => p.Name == name);
@@ -71,7 +72,7 @@ namespace virtual_pet.Core.Managers
 
             // Create a new PetBase instance and set its state based on the loaded PetModel
             PetBase pet = CreatePetInstance(loadedPetModel.Type);
-            pet.Name = loadedPetModel.Name;
+            pet.PetName = loadedPetModel.Name;
             pet.Health.Value = loadedPetModel.Health;
             pet.Energy.Value = loadedPetModel.Energy;
             pet.Hunger.Value = loadedPetModel.Hunger;
@@ -117,9 +118,10 @@ namespace virtual_pet.Core.Managers
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             var pets = GetPets();
-            foreach (var pet in  pets)
+            foreach (var pet in pets)
             {
-                if (pet == null) {
+                if (pet == null)
+                {
                     return;
                 }
 
