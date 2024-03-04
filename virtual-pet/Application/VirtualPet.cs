@@ -10,6 +10,7 @@ namespace virtual_pet.Application
     {
         static void Main()
         {
+            bool validinput = false;
             List<string> menuItems = new List<string>
             {
             "Show Pet Overview",
@@ -56,16 +57,24 @@ namespace virtual_pet.Application
                         }
                         break;
                     case 2:
-                        Console.Clear ();
+                        string petName = "Leona";
+                        while (!validinput)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Name your new Pet: ");
+                            petName = Console.ReadLine();
+                            if (!string.IsNullOrEmpty(petName))
+                            {
+                                validinput = true;
+                            }
+                        }
 
-                        Console.Write("Name your new Pet: ");
-                        string petName = Console.ReadLine();
-
+                        validinput = false;
                         PetBase newPet = new Lenora();
-                        newPet.Name = petName;
+                        newPet.Name = petName; 
                         newPet.FillAll();
                         petManager.SavePet(newPet);
-
+                        
                         Console.WriteLine($"Your new pet {petName} was added");
                         break;
                     case 3:
