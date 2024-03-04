@@ -1,0 +1,23 @@
+name: Delete Source Branch
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - develop
+
+jobs:
+  delete_branch_on_merge:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Detect merge
+        run: |
+          echo "🔎 Merged ${{ github.head_ref }} into ${{ github.base_ref }} in repository ${{ github.repository }}."
+      - name: Delete branch
+        run: |
+          git push origin --delete ${{ github.head_ref }}
+          echo "🎉 Branch ${{ github.head_ref }} was automatically deleted after merge."
+          
