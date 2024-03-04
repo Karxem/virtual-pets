@@ -6,10 +6,10 @@ namespace virtual_pet.Core.Entities.Common
     internal abstract class PetBase
     {
         public string PetName {  get; set; }
-        public StatModel Health = new();
-        public StatModel Energy = new();
-        public StatModel Hunger = new();
-        public StatModel Thirst = new();
+        public StatModel Health = new(0, 100);
+        public StatModel Energy = new(0, 100);
+        public StatModel Hunger = new(0, 100);
+        public StatModel Thirst = new(0, 100);
 
         public void Heal(double amount)
         {

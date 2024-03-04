@@ -33,7 +33,7 @@ namespace virtual_pet.Core.Managers
         public void SavePet(PetBase pet)
         {
             PetModel petModel = new PetModel(
-                name: pet.Name,
+                name: pet.PetName,
                 type: pet.GetPetType(),
                 health: pet.Health.Value,
                 energy: pet.Energy.Value,
@@ -71,7 +71,7 @@ namespace virtual_pet.Core.Managers
 
             // Create a new PetBase instance and set its state based on the loaded PetModel
             PetBase pet = CreatePetInstance(loadedPetModel.Type);
-            pet.Name = loadedPetModel.Name;
+            pet.PetName = loadedPetModel.Name;
             pet.Health.Value = loadedPetModel.Health;
             pet.Energy.Value = loadedPetModel.Energy;
             pet.Hunger.Value = loadedPetModel.Hunger;
