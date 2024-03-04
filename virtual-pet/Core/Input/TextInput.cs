@@ -23,6 +23,12 @@ namespace virtual_pet.Core.Input {
             set { customRegex = value; flags |= CUSTOMREGEX; }
         }
 
+        public ConsoleColor Background = ConsoleColor.Black;
+        public ConsoleColor Foreground = ConsoleColor.White;
+
+        public ConsoleColor SelectionBackground = ConsoleColor.White;
+        public ConsoleColor SelectionForeground = ConsoleColor.Black;
+
 
         int displayColumn = 0;
         int column = 0;
@@ -148,15 +154,19 @@ namespace virtual_pet.Core.Input {
                     }
                 }
             }
-            for(int i=0;  i< buffer.Width && displayColumn + i < Text.Length;  i++)
+            for(int i=0;  buffer.Cell+i < buffer.Width && displayColumn + i < Text.Length;  i++)
             {
                 if((displayColumn + i) == column)
                 {
-                    buffer.Write(Text[displayColumn + i].ToString(), ConsoleColor.White, ConsoleColor.Black);
+                    buffer.Write(Text[displayColumn + i].ToString(), SelectionBackground, SelectionForeground);
                     continue;
                 }
 
-                buffer.Write(Text[displayColumn + i].ToString(), ConsoleColor.Black, ConsoleColor.White);
+                buffer.Write(Text[displayColumn + i].ToString(), Background, Foreground);
+            }
+            if(column == Text.Length)
+            {
+                buffer.Write(" ", SelectionBackground, SelectionForeground);
             }
         }
 
