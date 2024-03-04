@@ -9,6 +9,8 @@ namespace virtual_pet.Core.Utils
         public delegate void ItemSelected(object sender, int selectedItemIndex);
         public event ItemSelected onItemSelected;
 
+
+
         private OptionStripItem[] optionStripItems =
         {
             new OptionStripItem("Exit", ' ', ConsoleKey.Escape),
@@ -22,6 +24,19 @@ namespace virtual_pet.Core.Utils
         private int selectedItemIndex;
         private int itemsPerPage = 6;
         private int currentPage = 0;
+
+        public bool IsActive { get; set; }
+
+        //public object SetActive()
+        //{
+        //    IsActive = true;
+        //    return null;
+        //}
+        //public object SetInactive()
+        //{
+        //    IsActive = false;
+        //    return null;
+        //}
 
         //public Render.Buffer Buffer { get; set; }
 
@@ -82,7 +97,7 @@ namespace virtual_pet.Core.Utils
             for (int i = currentPage * itemsPerPage; i < currentPage * itemsPerPage + itemsPerPage && i < menuItems.Count; i++)
             {
                 menuItems[i].IsSeletected = false;
-                if (i == selectedItemIndex)
+                if (i == selectedItemIndex && IsActive)
                     menuItems[i].IsSeletected = true;
                 menuItems[i].Display(buffer);
                 buffer.WriteLine();

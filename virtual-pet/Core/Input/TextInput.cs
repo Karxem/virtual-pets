@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.Transactions;
 using virtual_pet.Core.Render;
 
 namespace virtual_pet.Core.Input {
@@ -23,11 +24,18 @@ namespace virtual_pet.Core.Input {
             set { customRegex = value; flags |= CUSTOMREGEX; }
         }
 
+        public bool IsActive { get; set; }
+
         public ConsoleColor Background = ConsoleColor.Black;
         public ConsoleColor Foreground = ConsoleColor.White;
 
         public ConsoleColor SelectionBackground = ConsoleColor.White;
         public ConsoleColor SelectionForeground = ConsoleColor.Black;
+
+        public ConsoleColor ActiveBackground = ConsoleColor.Black;
+        public ConsoleColor ActiveForeground = ConsoleColor.White;
+
+
 
 
         int displayColumn = 0;
@@ -140,37 +148,47 @@ namespace virtual_pet.Core.Input {
         }
 
         public void Display(Render.Buffer buffer) {
+            ConsoleColor bg = IsActive ? ActiveBackground : Background;
+            ConsoleColor fg = IsActive ? ActiveForeground : Foreground;
             if (Text.Length - column < buffer.Width)
             {
                 if(column < displayColumn)
                 {
-                    displayColumn = Math.Max(0, column - 4); 
+                    displayColumn = Math.Max(0, column - ((buffer.Width - buffer.Cell) / 2)); 
                 }
                 else
                 {
-                    if(column > displayColumn + buffer.Width)
+                    if(column > displayColumn + (buffer.Width - buffer.Cell))
                     {
-                        displayColumn += buffer.Width;
+                        displayColumn += ((buffer.Width - buffer.Cell) / 2);
+
                     }
                 }
             }
             for(int i=0;  buffer.Cell+i < buffer.Width && displayColumn + i < Text.Length;  i++)
             {
-                if((displayColumn + i) == column)
+                if(displayColumn != 0 && i == 0) { 
+                
+                    buffer.Write("<", SelectionBackground, SelectionForeground);
+                    continue;
+                    
+                }
+                if((displayColumn + i) == column && IsActive)
                 {
                     buffer.Write(Text[displayColumn + i].ToString(), SelectionBackground, SelectionForeground);
                     continue;
                 }
 
-                buffer.Write(Text[displayColumn + i].ToString(), Background, Foreground);
+                buffer.Write(Text[displayColumn + i].ToString(), bg, fg);
             }
-            if(column == Text.Length)
+            if(column == Text.Length && IsActive)
             {
                 buffer.Write(" ", SelectionBackground, SelectionForeground);
             }
         }
 
         public bool RequieresPassAll() => true;
+
 
         public void KeyPressed(ConsoleKeyInfo key) {
             switch (key.Key)

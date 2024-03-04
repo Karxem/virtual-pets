@@ -10,6 +10,9 @@ using virtual_pet.Core.Input;
 namespace virtual_pet.Core.Entities.Common {
     public abstract class EntityBase : IInputListener, IDisplayable {
 
+
+        public bool IsActive { get; set; }
+
         public Render.Vector2 Position { get; set; } = new Render.Vector2();
         public Render.Vector2 Direction { get; set; } = new Render.Vector2();
 
