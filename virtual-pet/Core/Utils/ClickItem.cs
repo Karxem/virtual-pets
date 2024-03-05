@@ -12,5 +12,9 @@ namespace virtual_pet.Core.Utils {
         public ClickItem(int id, string text, OnClickEvent handler) : base(id, text){
             this.onClick = handler;
         }
+
+        public void FireOnClick() {
+            onClick?.Invoke(this, Text);
+        }
     }
 }

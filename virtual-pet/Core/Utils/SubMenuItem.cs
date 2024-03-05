@@ -12,5 +12,13 @@ namespace virtual_pet.Core.Utils {
 
         public SubMenuItem(int id, string text ) : base(id, text) { }
 
+        public void Open() {
+            Engine.OpenMenu(Menu);
+        }
+
+        public void Close() {
+            Engine.CloseMenu();
+        }
+
     }
 }
