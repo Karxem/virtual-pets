@@ -4,8 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace virtual_pet.Core.Render{
-    internal class DebugPrint : IDisplayable{
+namespace virtual_pet.Core.Render {
+    internal class DebugPrint : IDisplayable {
+
+        //public void Display(Render.Buffer buffer) {
+        //    for (int i = 0; i < 16; i++)
+        //    {
+        //        for (int j = 0; j < 16; j++)
+        //        {
+        //            int code = i + (j * 16);
+        //            buffer.Write("");
+        //        }
+        //    }
+        //}
+
         public void Display(Render.Buffer buffer) {
             buffer.WriteLine("Foregrounds: ", ConsoleColor.Black, ConsoleColor.White);
             buffer.Write("[Red]", ConsoleColor.Black, ConsoleColor.Red);
@@ -20,7 +32,7 @@ namespace virtual_pet.Core.Render{
             buffer.WriteLine("[DarkCyan]", ConsoleColor.Black, ConsoleColor.DarkCyan);
             buffer.Write("[Magenta]", ConsoleColor.Black, ConsoleColor.Magenta);
             buffer.WriteLine("[DarkMagenta]", ConsoleColor.Black, ConsoleColor.DarkMagenta);
-            
+
             buffer.WriteLine("Backgrounds: ", ConsoleColor.Black, ConsoleColor.White);
             buffer.Write("[Red]", ConsoleColor.Red, ConsoleColor.White);
             buffer.WriteLine("[DarkRed]", ConsoleColor.DarkRed, ConsoleColor.White);
