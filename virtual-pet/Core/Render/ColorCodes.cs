@@ -45,7 +45,7 @@ namespace virtual_pet.Core.Render
                 case ConsoleColor.Magenta:      col+= "95"; break;
                 case ConsoleColor.Cyan:         col+= "96"; break;
                 case ConsoleColor.White:        col+= "97"; break;
-                default: return GetBackgroundColor(Backgrground);
+                default: return GetBackground(Backgrground);
             }
             switch (Backgrground)
             {
@@ -66,13 +66,13 @@ namespace virtual_pet.Core.Render
                 case ConsoleColor.Magenta:      col+= ";105m"; break;
                 case ConsoleColor.Cyan:         col+= ";106m"; break;
                 case ConsoleColor.White:        col+= ";107m"; break;
-                default: return GetForegroundColor(Foreground);
+                default: return GetForeground(Foreground);
             }
             return col;
 
         }
 
-        public static string GetForegroundColor(ConsoleColor color)
+        public static string GetForeground(ConsoleColor color)
         {
             switch (color)
             {
@@ -99,7 +99,7 @@ namespace virtual_pet.Core.Render
 
         }
 
-        public static string GetBackgroundColor(ConsoleColor color)
+        public static string GetBackground(ConsoleColor color)
         {
             switch (color)
             {

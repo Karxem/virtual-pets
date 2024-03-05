@@ -73,6 +73,7 @@ namespace virtual_pet.Core.Render
             FillBuffer(OptionStripBuffer);
             foreach(Buffer b in buffers)
             {
+                b.Fill();
                 FillBuffer(b);
             }
         }
@@ -101,6 +102,27 @@ namespace virtual_pet.Core.Render
             {
                 for (int i = 0; i < MainBuffer.Width && i < Console.WindowWidth; i++)
                 {
+                    //this monster is to optimise the console string buffer size
+                    //checks if the previus cell uses the same colors, and only appends
+                    //the ansi color code if it isn't
+                    if(i > 0)
+                    {
+                        if(MainBuffer[i, line].Background == MainBuffer[i-1, line].Background)
+                        {
+                            if(MainBuffer[i, line].Foreground == MainBuffer[i-1, line].Foreground)
+                            {
+                                builder.Append(MainBuffer[i, line].Character);
+                                continue;
+                            }
+                            builder.Append(ColorCodes.GetForeground(MainBuffer[i, line].Foreground) + MainBuffer[i, line].Character);
+                            continue;
+                        }
+                        if (MainBuffer[i, line].Foreground == MainBuffer[i - 1, line].Foreground)
+                        {
+                            builder.Append(ColorCodes.GetBackground(MainBuffer[i, line].Background) + MainBuffer[i, line].Character);
+                            continue;
+                        }
+                    }
                     builder.Append(ColorCodes.GetColor(MainBuffer[i, line].Background, MainBuffer[i, line].Foreground) + MainBuffer[i, line].Character);
                     //builder.Append(MainBuffer[i, line].Character);
                 }
