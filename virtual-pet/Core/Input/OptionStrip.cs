@@ -21,10 +21,6 @@ namespace virtual_pet.Core.Input {
             Items.AddRange(items);
         }
 
-        public void Display() {
-            
-        }
-
         public void Display(Render.Buffer buffer) {
             string s = "";
             int i = 0;
