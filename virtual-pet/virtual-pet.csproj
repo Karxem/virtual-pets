@@ -25,9 +25,6 @@
   <ItemGroup>
     <Folder Include="Core\Manager\" />
     <Folder Include="Application\" />
-    <Folder Include="Assets\" />
-    <Folder Include="Core\Entities\Pets\" />
-    <Folder Include="Core\Levels\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
