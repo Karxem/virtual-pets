@@ -40,8 +40,8 @@
 
         private void DisplayHeader()
         {
-            Console.WriteLine("Welcome to Virtual Pet");
-            Console.WriteLine("----------------------------\n");
+            CenterText("Welcome to Virtual Pet");
+            CenterText("-------------------------------------------------------\n");
         }
 
         private void DisplayMenu()
@@ -68,6 +68,14 @@
         private void MoveSelectionDown()
         {
             selectedItemIndex = (selectedItemIndex + 1) % menuItems.Count;
+        }
+
+        private static void CenterText(string text)
+        {
+            int width = Console.WindowWidth;
+            int leftPadding = (width - text.Length) / 2;
+            Console.SetCursorPosition(leftPadding, Console.CursorTop);
+            Console.WriteLine(text);
         }
     }
 }
