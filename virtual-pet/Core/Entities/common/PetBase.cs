@@ -1,40 +1,26 @@
-﻿using virtual_pet.Core.Models;
-
+﻿using System.Reflection;
+using virtual_pet.Core.Models;
 
 namespace virtual_pet.Core.Entities.Common
 {
     internal abstract class PetBase
     {
         public string PetName { get; set; }
-        public StatModel Health = new StatModel(0, 100);
-        public StatModel Energy = new StatModel(0, 100);
-        public StatModel Attack = new StatModel(0, 100);
-        public StatModel Defense = new StatModel(0, 100);
+        public StatModel Health { get; } = new StatModel(0, 100);
+        public StatModel Energy { get; } = new StatModel(0, 100);
+        public StatModel Attack { get; } = new StatModel(0, 100);
+        public StatModel Defense { get; } = new StatModel(0, 100);
 
-        // Basicneed stat properties
-        public StatModel Hunger = new StatModel(0, 100);
-        public StatModel Thirst = new StatModel(0, 100);
+        public StatModel Hunger { get; } = new StatModel(0, 100);
+        public StatModel Thirst { get; } = new StatModel(0, 100);
 
-        // Level stat properties
-        public StatModel Experience = new StatModel(0, 10000);
-        public StatModel Level = new StatModel(0, 100);
+        public StatModel Experience { get; } = new StatModel(0, 10000);
+        public StatModel Level { get; } = new StatModel(0, 100);
 
-        public void Heal(double amount)
-        {
-            Health.Value += amount;
-        }
-        public void Sleep(double amount)
-        {
-            Energy.Value += amount;
-        }
-        public void Drink(double amount)
-        {
-            Thirst.Value += amount;
-        }
-        public void Eat(double amount)
-        {
-            Hunger.Value += amount;
-        }
+        public void Heal(double amount) => Health.Value += amount;
+        public void Sleep(double amount) => Energy.Value += amount;
+        public void Drink(double amount) => Thirst.Value += amount;
+        public void Eat(double amount) => Hunger.Value += amount;
 
         public void AddExp(double amount)
         {
@@ -42,44 +28,28 @@ namespace virtual_pet.Core.Entities.Common
             Experience.Value += amount;
         }
 
-        public void TakeDamage(double amount)
+        public void TakeDamage(double amount) => Health.Value -= amount;
+
+        public bool IsAlive() => Health.Value > 0.0;
+
+        public void InitPetBaseStats()
         {
-            Health.Value -= amount;
+            Level.Value = 1;
+            Experience.Value = 0;
+            Attack.Value = 8.0;
+            Defense.Value = 5.0;
+            Health.Value = 100;
+            Energy.Value = 100;
+            Thirst.Value = 100;
+            Hunger.Value = 100;
         }
 
-        public void FillAll()
+        public void FillBasicNeeds()
         {
             Health.Value += 100;
             Energy.Value += 100;
             Thirst.Value += 100;
             Hunger.Value += 100;
-            Attack.Value += 10;
-            Defense.Value += 5;
-            Level.Value += 1;
-        }
-
-        public void GainExperience(double amount)
-        {
-            Experience.Value += amount;
-            Console.WriteLine($"{PetName} gained {amount} experience.");
-
-            // Check if the pet should level up
-            CheckLevelUp();
-        }
-
-        private void CheckLevelUp()
-        {
-            double lvlUpThreshhold = Level.Value * 100;
-
-            if (Experience.Value < lvlUpThreshhold)
-            {
-                return;
-            }
-
-            Level.Value++;
-            Experience.Value -= lvlUpThreshhold;
-
-            Console.WriteLine($"{PetName} leveled up to Level {Level.Value}!");
         }
 
         public void Tick()
@@ -92,25 +62,37 @@ namespace virtual_pet.Core.Entities.Common
             Experience.Value -= random.Next(0, 5);
         }
 
-        public bool IsAlive()
+        public void GainExperience(double amount)
         {
-            switch (Health.Value)
-            {        
-                case > 0.0:
-                    return true;
-                case <= 0.0:
-                    return false;
-                default:
-                    return true;
-            }
+            Experience.Value += amount;
+            Console.WriteLine($"{PetName} gained {amount} experience.");
+
+            // Check for pet level up
+            CheckLevelUp();
         }
 
-        public string GetInfo()
+        private void CheckLevelUp()
         {
-            return $"[ Health: {Health.Value},Energy: {Energy.Value}, Hunger: {Hunger.Value}, Thirst: {Thirst.Value} ]";
+            double lvlUpThreshold = Level.Value * 100;
+
+            if (Experience.Value < lvlUpThreshold)
+                return;
+
+            Level.Value++;
+            Experience.Value -= lvlUpThreshold;
+
+            Console.WriteLine($"{PetName} leveled up to Level {Level.Value}!");
         }
 
-        // Abstract method to get the pet type
+        private static readonly List<string> registeredPetTypes = new List<string>();
+
+        protected static void RegisterPetType(string petType)
+        {
+            registeredPetTypes.Add(petType);
+        }
+
+        public static List<string> GetPetTypes() => registeredPetTypes;
+
         public abstract string GetPetType();
     }
 }
