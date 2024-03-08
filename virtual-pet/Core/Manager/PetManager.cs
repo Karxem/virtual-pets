@@ -1,24 +1,27 @@
 ﻿using Newtonsoft.Json;
+using System.Reflection;
 using System.Timers;
 using virtual_pet.Core.Entities.Common;
 using virtual_pet.Core.Entities.Pets;
 using virtual_pet.Core.Models;
 
-
 namespace virtual_pet.Core.Managers
 {
     internal class PetManager
     {
-        private string FilePath;
-        private System.Timers.Timer Timer;
-        private static int Interval = 10000;
-        private List<PetModel> petModels;
+        private readonly string filePath;
+        private static System.Timers.Timer timer;
+        private static readonly int interval = 10000;
+        private List<PetModel> petModels = new List<PetModel>();
 
         public PetManager()
         {
-            FilePath = LoadFilePath();
+            filePath = LoadFilePath();
+
+            new Lenora();
+            new Flololo();
             LoadPets();
-            SetTimer();
+            SetGameTickTimer();
         }
 
         private string LoadFilePath()
@@ -31,6 +34,7 @@ namespace virtual_pet.Core.Managers
             string fileName = "pets.json";
             return Path.Combine(myAppFolder, fileName);
         }
+
         public void SavePet(PetBase pet)
         {
             PetModel petModel = new PetModel(
@@ -55,17 +59,22 @@ namespace virtual_pet.Core.Managers
             }
             else
             {
-                existingPet.Health = petModel.Health;
-                existingPet.Energy = petModel.Energy;
-                existingPet.Attack = petModel.Attack;
-                existingPet.Defense = petModel.Defense;
-                existingPet.Hunger = petModel.Hunger;
-                existingPet.Thirst = petModel.Thirst;
-                existingPet.Experience = petModel.Experience;
-                existingPet.Level = petModel.Level;
+                UpdateExistingPet(existingPet, petModel);
             }
 
             SavePetsToFile();
+        }
+
+        private void UpdateExistingPet(PetModel existingPet, PetModel newPet)
+        {
+            existingPet.Health = newPet.Health;
+            existingPet.Energy = newPet.Energy;
+            existingPet.Attack = newPet.Attack;
+            existingPet.Defense = newPet.Defense;
+            existingPet.Hunger = newPet.Hunger;
+            existingPet.Thirst = newPet.Thirst;
+            existingPet.Experience = newPet.Experience;
+            existingPet.Level = newPet.Level;
         }
 
         // Load a pet from file based on its name
@@ -75,12 +84,13 @@ namespace virtual_pet.Core.Managers
 
             if (loadedPetModel == null)
             {
+                Console.WriteLine($"Pet with name {name} not found.");
                 return null;
             }
 
             // Create a new PetBase instance and set its state based on the loaded PetModel
-            PetBase pet = CreatePetInstance(loadedPetModel.Type);
-            pet.PetName = loadedPetModel.Name;
+            PetBase pet = CreateNewPetInstance(loadedPetModel.Name, loadedPetModel.Type);
+
             pet.Health.Value = loadedPetModel.Health;
             pet.Energy.Value = loadedPetModel.Energy;
             pet.Attack.Value = loadedPetModel.Attack;
@@ -93,14 +103,39 @@ namespace virtual_pet.Core.Managers
             return pet;
         }
 
-        public List<PetModel> GetPets()
+        public List<PetModel> GetPets() => petModels;
+
+        public PetBase CreateNewPetInstance(string name, string petType)
         {
-            return petModels;
+            if (petType == null)
+            {
+                Console.WriteLine("Invalid pet type");
+                return null;
+            }
+
+            Type type = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => typeof(PetBase).IsAssignableFrom(t) && t.Name == petType);
+
+            if (type == null)
+            {
+                Console.WriteLine($"Pet type '{petType}' not found or not derived from PetBase.");
+                return null;
+            }
+
+            PetBase pet = (PetBase)Activator.CreateInstance(type);
+
+            if (pet != null)
+            {
+                pet.PetName = name;
+                pet.InitPetBaseStats();
+                return pet;
+            }
+
+            throw new InvalidOperationException("Failed to create a new pet instance");
         }
 
         private void LoadPets()
         {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FilePath);
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, this.filePath);
 
             if (!File.Exists(filePath))
             {
@@ -113,46 +148,32 @@ namespace virtual_pet.Core.Managers
 
         private void SavePetsToFile()
         {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FilePath);
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, this.filePath);
 
             string json = JsonConvert.SerializeObject(petModels, Formatting.Indented);
             File.WriteAllText(filePath, json);
         }
 
-        private void SetTimer()
+        private void SetGameTickTimer()
         {
-            Timer = new System.Timers.Timer(Interval);
-            Timer.Elapsed += OnTimedEvent;
-            Timer.AutoReset = true;
-            Timer.Enabled = true;
+            timer = new System.Timers.Timer(interval);
+            timer.Elapsed += OnTimedEvent;
+            timer.AutoReset = true;
+            timer.Enabled = true;
         }
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             var pets = GetPets();
-            foreach (var pet in  pets)
+            foreach (var pet in pets)
             {
-                if (pet == null) {
-                    return;
-                }
+                if (pet == null)
+                    continue;
 
                 var petInstance = LoadPet(pet.Name);
-                petInstance.Tick();
+                petInstance?.Tick();
 
                 SavePet(petInstance);
-            }
-        }
-
-        private static PetBase CreatePetInstance(string type)
-        {
-            switch (type)
-            {
-                case "Lenora":
-                    return new Lenora();
-                case "Flololo":
-                    return new Flololo();
-                default:
-                    throw new ArgumentException("Invalid pet type");
             }
         }
     }
