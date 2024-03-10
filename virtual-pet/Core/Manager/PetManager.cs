@@ -18,8 +18,6 @@ namespace virtual_pet.Core.Managers
         {
             filePath = LoadFilePath();
 
-            new Lenora();
-            new Flololo();
             LoadPets();
             SetGameTickTimer();
         }
