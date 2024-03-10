@@ -84,14 +84,9 @@ namespace virtual_pet.Core.Entities.Common
             Console.WriteLine($"{PetName} leveled up to Level {Level.Value}!");
         }
 
-        private static readonly List<string> registeredPetTypes = new List<string>();
-
-        protected static void RegisterPetType(string petType)
-        {
-            registeredPetTypes.Add(petType);
+            Console.WriteLine($"{Name} leveled up to Level {Level.Value}!");
         }
 
-        public static List<string> GetPetTypes() => registeredPetTypes;
 
         public abstract string GetPetType();
     }
