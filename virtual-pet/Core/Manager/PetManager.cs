@@ -2,8 +2,6 @@
 using System.Reflection;
 using System.Timers;
 using virtual_pet.Core.Entities.Common;
-using virtual_pet.Core.Entities.Pets;
-using virtual_pet.Core.Models;
 
 namespace virtual_pet.Core.Managers
 {
@@ -24,20 +22,8 @@ namespace virtual_pet.Core.Managers
             SetGameTickTimer();
         }
 
-        private string LoadFilePath()
-        {
-            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-            string myAppFolder = Path.Combine(appDataPath, "virtual-pet");
-            Directory.CreateDirectory(myAppFolder); // Create file if not exists
-
-            string fileName = "pets.json";
-            return Path.Combine(myAppFolder, fileName);
-        }
-
         public void SavePet(PetBase pet)
         {
-            // Check if there is an existing pet with the same name
             var existingPet = pets.Find(p => p.Name == pet.Name);
 
             if (existingPet == null)
@@ -121,6 +107,28 @@ namespace virtual_pet.Core.Managers
             throw new InvalidOperationException("Failed to create a new pet instance");
         }
 
+        public List<string> GetPetTypes()
+        {
+            List<string> types = new List<string>();
+            foreach (Type type in Assembly.GetAssembly(typeof(PetBase)).GetTypes().Where(myType => !myType.IsAbstract && myType.IsSubclassOf(typeof(PetBase))))
+            {
+                types.Add(type.Name);
+            }
+            types.Sort();
+            return types;
+        }
+
+        private string LoadFilePath()
+        {
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            string myAppFolder = Path.Combine(appDataPath, "virtual-pet");
+            Directory.CreateDirectory(myAppFolder); // Create file if not exists
+
+            string fileName = "pets.json";
+            return Path.Combine(myAppFolder, fileName);
+        }
+
         private void LoadPets()
         {
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, this.filePath);
@@ -162,7 +170,9 @@ namespace virtual_pet.Core.Managers
                 var petInstance = LoadPet(pet.Name);
                 if (petInstance != null)
                 {
-                    petInstance.Tick();
+                    petInstance.GameTick();
+
+                    // This leads to a crash once you load the pet.json in your local environment
                     SavePet(petInstance);
                 }
             }
