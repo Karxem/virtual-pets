@@ -8,6 +8,7 @@ namespace virtual_pet.Core.Entities.Common
     public abstract class LevelBase
     {
         private static readonly PetManager petManager = new PetManager();
+        private static Random random = new Random();
 
         public void StartFight(string petName)
         {
@@ -62,9 +63,9 @@ namespace virtual_pet.Core.Entities.Common
                     enemyPet.TakeDamage(damageDealt);
 
                     Console.Clear();
+                    playerPet.UseAbility();
                     Console.WriteLine($"\n{playerPet.Name} dealt {damageDealt} damage to {enemyPet.Name}!");
                     break;
-
                 case 2:
                     // Logic for using items here
                     Console.WriteLine("You used an item!");
@@ -112,10 +113,18 @@ namespace virtual_pet.Core.Entities.Common
 
         private static PetBase CreateEntity()
         {
-            PetBase entityPet = new Lenora();
-            entityPet.Name = "Entity";
-            entityPet.FillBasicNeeds();
+            List<string> types = petManager.GetPetTypes();
 
+            if(types == null)
+            {
+                Console.WriteLine("No pet types could be found.");
+                return null;
+            }
+
+            string type = types[random.Next(0, types.Count)];
+            PetBase entityPet = petManager.CreateNewPetInstance(type, type);
+            
+            entityPet.FillBasicNeeds();
             return entityPet;
         }
     }
