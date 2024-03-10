@@ -100,5 +100,6 @@ namespace virtual_pet.Core.Entities.Common
         }
 
         public abstract string GetPetType();
+        public abstract void UseAbility();
     }
 }

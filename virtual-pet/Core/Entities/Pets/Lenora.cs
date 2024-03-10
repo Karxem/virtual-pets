@@ -9,5 +9,10 @@ namespace virtual_pet.Core.Entities.Pets
         {
             return "Lenora";
         }
+
+        public override void UseAbility()
+        {
+            Console.WriteLine(this.Name + " used its ability!");
+        }
     }
 }
