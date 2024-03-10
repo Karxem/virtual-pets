@@ -294,13 +294,5 @@ namespace virtual_pet.Core.Utils
         {
 
         }
-
-        private static void CenterText(string text)
-        {
-            int width = Console.WindowWidth;
-            int leftPadding = (width - text.Length) / 2;
-            Console.SetCursorPosition(leftPadding, Console.CursorTop);
-            Console.WriteLine(text);
-        }
     }
 }
