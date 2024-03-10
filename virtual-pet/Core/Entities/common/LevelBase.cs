@@ -27,7 +27,7 @@ namespace virtual_pet.Core.Entities.Common
             }
 
             Console.Clear();
-            Console.WriteLine($"{playerPet.PetName} encounters {entity.PetName}!\n");
+            Console.WriteLine($"{playerPet.Name} encounters {entity.Name}!\n");
 
             while (playerPet.IsAlive() && entity.IsAlive())
             {
@@ -40,16 +40,15 @@ namespace virtual_pet.Core.Entities.Common
             Console.Clear();
             if (!entity.IsAlive())
             {
-                Random random = new Random();
-                playerPet.GainExperience(random.Next(2, 10));
+                    playerPet.GainExperience();
             }
 
-            Console.WriteLine(playerPet.IsAlive() ? $"{playerPet.PetName} wins!" : $"{entity.PetName} wins!");
+            Console.WriteLine(playerPet.IsAlive() ? $"{playerPet.Name} wins!" : $"{entity.Name} wins!");
         }
 
         private void PlayerTurn(PetBase playerPet, PetBase enemyPet)
         {
-            Console.WriteLine($"Your turn, {playerPet.PetName}!\n");
+            Console.WriteLine($"Your turn, {playerPet.Name}!\n");
             Console.WriteLine("1. Attack");
             Console.WriteLine("2. Use Item");
             Console.WriteLine("3. Run");
@@ -63,7 +62,7 @@ namespace virtual_pet.Core.Entities.Common
                     enemyPet.TakeDamage(damageDealt);
 
                     Console.Clear();
-                    Console.WriteLine($"\n{playerPet.PetName} dealt {damageDealt} damage to {enemyPet.PetName}!");
+                    Console.WriteLine($"\n{playerPet.Name} dealt {damageDealt} damage to {enemyPet.Name}!");
                     break;
 
                 case 2:
@@ -84,7 +83,7 @@ namespace virtual_pet.Core.Entities.Common
             playerPet.TakeDamage(damageDealt);
             petManager.SavePet(playerPet);
 
-            Console.WriteLine($"{enemyPet.PetName} dealt {damageDealt} damage to {playerPet.PetName}!\n");
+            Console.WriteLine($"{enemyPet.Name} dealt {damageDealt} damage to {playerPet.Name}!\n");
         }
 
         private int GetPlayerChoice(int minValue, int maxValue)
@@ -114,7 +113,7 @@ namespace virtual_pet.Core.Entities.Common
         private static PetBase CreateEntity()
         {
             PetBase entityPet = new Lenora();
-            entityPet.PetName = "Entity";
+            entityPet.Name = "Entity";
             entityPet.FillBasicNeeds();
 
             return entityPet;

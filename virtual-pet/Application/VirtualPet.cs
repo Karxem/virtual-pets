@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using virtual_pet.Core.Entities.Common;
+﻿using virtual_pet.Core.Entities.Common;
 using virtual_pet.Core.Levels;
 using virtual_pet.Core.Managers;
-using virtual_pet.Core.Models;
 using virtual_pet.Core.Utils;
 
 namespace virtual_pet.Application
@@ -36,6 +33,11 @@ namespace virtual_pet.Application
                     continue;
                 }
 
+                if (pets == null)
+                {
+                    return;
+                }
+
                 switch (selectedIndex)
                 {
                     case 0:
@@ -66,7 +68,7 @@ namespace virtual_pet.Application
             }
         }
 
-        private static void ShowPetOverview(List<PetModel> pets)
+        private static void ShowPetOverview(List<PetBase> pets)
         {
             Console.Clear();
             Console.WriteLine(SendHeaderText(pets.Count));
@@ -74,13 +76,19 @@ namespace virtual_pet.Application
 
             foreach (var pet in pets)
             {
-                Console.WriteLine($"⎡ Name: {pet.Name}, Type: {pet.Type}, Level: {pet.Level}");
-                Console.WriteLine($"⎢ Energy: {pet.Energy}, Attack: {pet.Attack}, Defense: {pet.Defense}");
-                Console.WriteLine($"⎣ Health: {pet.Health}, Hunger: {pet.Hunger}, Thirst: {pet.Thirst}\n");
+                if (pet == null)
+                {
+                    continue;
+                }
+
+                Console.WriteLine($"< Name: {pet.Name ?? "Unknown"}, Type: {pet.GetPetType() ?? "Unknown"}, Level: {pet.Level?.Value ?? 0}");
+                Console.WriteLine($"< Energy: {pet.Energy?.Value ?? 0}, Attack: {pet.Attack?.Value ?? 0}, Defense: {pet.Defense?.Value ?? 0}");
+                Console.WriteLine($"< Health: {pet.Health?.Value ?? 0}, Hunger: {pet.Hunger?.Value ?? 0}, Thirst: {pet.Thirst?.Value ?? 0}\n");
             }
         }
 
-        private static void FillAllPetStats(List<PetModel> pets)
+
+        private static void FillAllPetStats(List<PetBase> pets)
         {
             Console.Clear();
             foreach (var pet in pets)
@@ -133,14 +141,13 @@ namespace virtual_pet.Application
         }
 
 
-        private static void GainExperience(List<PetModel> pets)
+        private static void GainExperience(List<PetBase> pets)
         {
             Console.Clear();
-            foreach(var pet in pets)
+            foreach (var pet in pets)
             {
                 PetBase activePet = petManager.LoadPet(pet.Name);
-                Random random = new Random();
-                activePet.GainExperience(random.Next(2, 10));
+                activePet.GainExperience();
 
                 petManager.SavePet(activePet);
             }
