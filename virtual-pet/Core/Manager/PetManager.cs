@@ -12,11 +12,13 @@ namespace virtual_pet.Core.Managers
         private readonly string filePath;
         private static System.Timers.Timer timer;
         private static readonly int interval = 10000;
-        private List<PetModel> petModels = new List<PetModel>();
+        private List<PetBase> pets;
 
         public PetManager()
         {
             filePath = LoadFilePath();
+
+            pets = new List<PetBase>();
 
             LoadPets();
             SetGameTickTimer();
@@ -35,50 +37,38 @@ namespace virtual_pet.Core.Managers
 
         public void SavePet(PetBase pet)
         {
-            PetModel petModel = new PetModel(
-                name: pet.PetName,
-                type: pet.GetPetType(),
-                health: pet.Health.Value,
-                energy: pet.Energy.Value,
-                attack: pet.Attack.Value,
-                defense: pet.Defense.Value,
-                hunger: pet.Hunger.Value,
-                thirst: pet.Thirst.Value,
-                exp: pet.Experience.Value,
-                level: pet.Level.Value
-            );
 
             // Check if there is an existing pet with the same name
-            var existingPet = petModels.Find(p => p.Name == petModel.Name);
+            var existingPet = pets.Find(p => p.Name == pet.Name);
 
             if (existingPet == null)
             {
-                petModels.Add(petModel);
+                pets.Add(pet);
             }
             else
             {
-                UpdateExistingPet(existingPet, petModel);
+                UpdateExistingPet(existingPet, pet);
             }
 
             SavePetsToFile();
         }
 
-        private void UpdateExistingPet(PetModel existingPet, PetModel newPet)
+        private void UpdateExistingPet(PetBase existingPet, PetBase newPet)
         {
-            existingPet.Health = newPet.Health;
-            existingPet.Energy = newPet.Energy;
-            existingPet.Attack = newPet.Attack;
-            existingPet.Defense = newPet.Defense;
-            existingPet.Hunger = newPet.Hunger;
-            existingPet.Thirst = newPet.Thirst;
-            existingPet.Experience = newPet.Experience;
-            existingPet.Level = newPet.Level;
+            existingPet.Health.Value = newPet.Health;
+            existingPet.Energy.Value = newPet.Energy;
+            existingPet.Attack.Value = newPet.Attack;
+            existingPet.Defense.Value = newPet.Defense;
+            existingPet.Hunger.Value = newPet.Hunger;
+            existingPet.Thirst.Value = newPet.Thirst;
+            existingPet.Experience.Value = newPet.Experience;
+            existingPet.Level.Value = newPet.Level;
         }
 
         // Load a pet from file based on its name
         public PetBase LoadPet(string name)
         {
-            var loadedPetModel = petModels.Find(p => p.Name == name);
+            var loadedPetModel = pets.Find(p => p.Name == name);
 
             if (loadedPetModel == null)
             {
@@ -87,7 +77,7 @@ namespace virtual_pet.Core.Managers
             }
 
             // Create a new PetBase instance and set its state based on the loaded PetModel
-            PetBase pet = CreateNewPetInstance(loadedPetModel.Name, loadedPetModel.Type);
+            PetBase pet = CreateNewPetInstance(loadedPetModel.Name, loadedPetModel.GetPetType());
 
             pet.Health.Value = loadedPetModel.Health;
             pet.Energy.Value = loadedPetModel.Energy;
@@ -101,7 +91,7 @@ namespace virtual_pet.Core.Managers
             return pet;
         }
 
-        public List<PetModel> GetPets() => petModels;
+        public List<PetBase> GetPets() => pets;
 
         public PetBase CreateNewPetInstance(string name, string petType)
         {
@@ -123,7 +113,7 @@ namespace virtual_pet.Core.Managers
 
             if (pet != null)
             {
-                pet.PetName = name;
+                pet.Name = name;
                 pet.InitPetBaseStats();
                 return pet;
             }
@@ -141,14 +131,15 @@ namespace virtual_pet.Core.Managers
             }
 
             string json = File.ReadAllText(filePath);
-            petModels = JsonConvert.DeserializeObject<List<PetModel>>(json);
+
+            pets = JsonConvert.DeserializeObject<List<PetBase>>(json, new PetConverter());
         }
 
         private void SavePetsToFile()
         {
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, this.filePath);
 
-            string json = JsonConvert.SerializeObject(petModels, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(pets, Formatting.Indented);
             File.WriteAllText(filePath, json);
         }
 

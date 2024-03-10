@@ -5,7 +5,8 @@ namespace virtual_pet.Core.Entities.Common
 {
     internal abstract class PetBase
     {
-        public string PetName { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
         public StatModel Health { get; } = new StatModel(0, 100);
         public StatModel Energy { get; } = new StatModel(0, 100);
         public StatModel Attack { get; } = new StatModel(0, 100);
@@ -14,8 +15,10 @@ namespace virtual_pet.Core.Entities.Common
         public StatModel Hunger { get; } = new StatModel(0, 100);
         public StatModel Thirst { get; } = new StatModel(0, 100);
 
-        public StatModel Experience { get; } = new StatModel(0, 10000);
+        public StatModel Experience { get; } = new StatModel(0, 1000);
         public StatModel Level { get; } = new StatModel(0, 100);
+
+        private static Random random = new Random();
 
         public void Heal(double amount) => Health.Value += amount;
         public void Sleep(double amount) => Energy.Value += amount;
@@ -24,7 +27,6 @@ namespace virtual_pet.Core.Entities.Common
 
         public void AddExp(double amount)
         {
-            Experience.SetRange(0, 1000);
             Experience.Value += amount;
         }
 
@@ -62,14 +64,27 @@ namespace virtual_pet.Core.Entities.Common
             Experience.Value -= random.Next(0, 5);
         }
 
-        public void GainExperience(double amount)
+        public void GainExperience()
         {
+            var amount = random.Next(2, 10);
             Experience.Value += amount;
-            Console.WriteLine($"{PetName} gained {amount} experience.");
+            Console.WriteLine($"{Name} gained {amount} experience.");
 
-            // Check for pet level up
             CheckLevelUp();
         }
+
+
+        public static List<string> GetPetTypes()
+        {
+            List<string> types = new List<string>();
+            foreach (Type type in Assembly.GetAssembly(typeof(PetBase)).GetTypes().Where(myType => !myType.IsAbstract && myType.IsSubclassOf(typeof(PetBase))))
+            {
+                types.Add(type.Name);
+            }
+            types.Sort();
+            return types;
+        }
+
 
         private void CheckLevelUp()
         {
@@ -81,12 +96,8 @@ namespace virtual_pet.Core.Entities.Common
             Level.Value++;
             Experience.Value -= lvlUpThreshold;
 
-            Console.WriteLine($"{PetName} leveled up to Level {Level.Value}!");
-        }
-
             Console.WriteLine($"{Name} leveled up to Level {Level.Value}!");
         }
-
 
         public abstract string GetPetType();
     }
