@@ -37,7 +37,6 @@ namespace virtual_pet.Core.Managers
 
         public void SavePet(PetBase pet)
         {
-
             // Check if there is an existing pet with the same name
             var existingPet = pets.Find(p => p.Name == pet.Name);
 
@@ -114,6 +113,7 @@ namespace virtual_pet.Core.Managers
             if (pet != null)
             {
                 pet.Name = name;
+                pet.Type = petType;
                 pet.InitPetBaseStats();
                 return pet;
             }
@@ -160,9 +160,11 @@ namespace virtual_pet.Core.Managers
                     continue;
 
                 var petInstance = LoadPet(pet.Name);
-                petInstance?.Tick();
-
-                SavePet(petInstance);
+                if (petInstance != null)
+                {
+                    petInstance.Tick();
+                    SavePet(petInstance);
+                }
             }
         }
     }
