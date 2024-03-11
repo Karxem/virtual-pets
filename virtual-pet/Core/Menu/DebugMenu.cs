@@ -17,6 +17,12 @@ namespace virtual_pet.Core.Menu {
             Menu = new ConsoleMenu();
             ToggleDebugPrint = Menu.CreateClickItem("Debug Color Print", onDebugPrint);
             DebugTextInput = Menu.CreateTextInputItem("Debug Text Input", onDebugTextInput);
+            
+            for(int i=0; i< 10; i++)
+            {
+                Menu.CreateClickItem("Item "+i);
+            }
+        
         }
 
 

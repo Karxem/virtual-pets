@@ -1,8 +1,6 @@
 ﻿using virtual_pet.Core.Render;
 using virtual_pet.Core.Input;
-using System.Reflection.Metadata.Ecma335;
-using System;
-using System.Text.RegularExpressions;
+using static virtual_pet.Core.Input.KeyBindings.MenuBindings;
 namespace virtual_pet.Core.Utils
 {
     public class ConsoleMenu : IInputListener, IDisplayable
@@ -13,7 +11,7 @@ namespace virtual_pet.Core.Utils
         public const int ACTION_MOVE_LEFT = -4;
         public const int ACTION_MOVE_RIGHT = -5;
 
-
+        //╠╣║╚╝╔╗↲⇡⇣
         public delegate void ItemSelected(object sender, int selectedItemIndex);
         public event ItemSelected onItemSelected;
 
@@ -22,10 +20,10 @@ namespace virtual_pet.Core.Utils
 
         private OptionStripItem[] optionStripItems =
         {
-            new OptionStripItem("Exit", ' ', ConsoleKey.Escape),
-            new OptionStripItem("Select", ' ', ConsoleKey.Enter),
-            new OptionStripItem("Up", ' ', ConsoleKey.UpArrow),
-            new OptionStripItem("Down", ' ', ConsoleKey.DownArrow)
+            new OptionStripItem(Select),
+            new OptionStripItem(MoveUp),
+            new OptionStripItem(MoveDown),
+            new OptionStripItem(Return)
         };
 
         private OptionStrip optionStrip;
@@ -201,12 +199,25 @@ namespace virtual_pet.Core.Utils
         public OptionStrip? GetOptionStrip() => optionStrip;
 
         public void Display(Render.Buffer buffer) {
-            for (int i = currentPage * itemsPerPage; i < currentPage * itemsPerPage + itemsPerPage && i < menuItems.Count; i++)
+            string arrow = "", leftBar = "";//, rightBar = "";
+            for (int i = currentPage * itemsPerPage; i < (currentPage * itemsPerPage) + itemsPerPage && i < menuItems.Count; i++)
             {
                 menuItems[i].IsSeletected = false;
+                
+                //rightBar = "║";
+                //arrow = (i== currentPage * itemsPerPage)  && (currentPage != 0) ? "⇡" : i==(currentPage * itemsPerPage)+itemsPerPage-1 && i < menuItems.Count ? "⇣" : "┊";
+                leftBar = (i==0) ? "╖" : i == menuItems.Count -1 ? "╜" : "║";
+
                 if (i == selectedItemIndex && IsActive)
+                {
+                    //leftBar = "╠";//╔╚╖╜
+                    leftBar = (i == 0) ? "╔" : i == menuItems.Count - 1 ? "╚" : "╠";
+                    //rightBar = "╣";
                     menuItems[i].IsSeletected = true;
+                }
+                buffer.Write(arrow+leftBar, ConsoleColor.Black, ConsoleColor.White);
                 menuItems[i].Display(buffer);
+                //buffer.Write(rightBar);
                 buffer.WriteLine();
 
                 //if (i == selectedItemIndex)
