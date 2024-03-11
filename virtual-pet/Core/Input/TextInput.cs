@@ -165,7 +165,7 @@ namespace virtual_pet.Core.Input {
                     }
                 }
             }
-            for(int i=0;  buffer.Cell+i < buffer.Width && displayColumn + i < Text.Length;  i++)
+            for(int i=0;  buffer.Cell < buffer.Width && displayColumn + i < Text.Length;  i++)
             {
                 if(displayColumn != 0 && i == 0) { 
                 

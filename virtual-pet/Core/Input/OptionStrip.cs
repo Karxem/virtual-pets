@@ -55,7 +55,9 @@ namespace virtual_pet.Core.Input {
         
         public string Name { get; set; }
         public ConsoleKeyInfo Key { get; set; }
+        KeyBindingEntry KeyBindingEntry { get; set; } 
         public bool Enabled { get; set; } = true;
+        public bool Visible { get; set; } = true;
 
         public OptionStripItem(string name, ConsoleKeyInfo key) {
             Name = name;
@@ -70,6 +72,10 @@ namespace virtual_pet.Core.Input {
             Key = new ConsoleKeyInfo(character, key, shift, alt, control);
         }
 
+        public OptionStripItem(KeyBindingEntry entry) {
+            KeyBindingEntry = entry;
+        }
+
         private string ModString() {
             string ret = "";
             ret += (Key.Modifiers & ConsoleModifiers.Control) == ConsoleModifiers.Control ? "Ctrl + " : "";
@@ -78,9 +84,24 @@ namespace virtual_pet.Core.Input {
             return ret;
         }
 
-        public override string ToString() {
-            return $"[{ModString()}{Key.KeyChar}]:" + Name;
+        private string ModString(ConsoleKeyInfo keyInfo) {
+            string ret = "";
+            ret += (keyInfo.Modifiers & ConsoleModifiers.Control) == ConsoleModifiers.Control ? "Ctrl + " : "";
+            ret += (keyInfo.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift ? "Shift + " : "";
+            ret += (keyInfo.Modifiers & ConsoleModifiers.Alt) == ConsoleModifiers.Alt ? "Alt + " : "";
+            return ret;
         }
+
+        //public override string ToString() {
+        //    return $"[{ModString()}{Key.KeyChar}]:" + Name;
+        //}
+
+        public override string ToString() {
+            if (!KeyBindingEntry.Binding.HasValue)
+                return $"[Unbound] {KeyBindingEntry.Name}";
+            return $"[{ModString(KeyBindingEntry.Binding.Value)}{KeyBindingEntry.BindingText}]: {KeyBindingEntry.Name}";
+        }
+
 
     }
 }
