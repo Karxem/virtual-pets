@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using virtual_pet.Core.Input;
+﻿using virtual_pet.Core.Input;
 using virtual_pet.Core.Render;
 using virtual_pet.Core.Utils;
 using virtual_pet.Core.Menu;
