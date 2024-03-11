@@ -8,8 +8,7 @@ using virtual_pet.Core.Render;
 using virtual_pet.Core.Input;
 
 namespace virtual_pet.Core.Entities.Common {
-    public abstract class EntityBase : IInputListener, IDisplayable {
-
+    internal abstract class EntityBase : IInputListener, IDisplayable {
 
         public bool IsActive { get; set; }
 
