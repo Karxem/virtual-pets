@@ -120,23 +120,36 @@ namespace virtual_pet.Core.Managers
         {
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, this.filePath);
 
-            if (!File.Exists(filePath))
+            try
             {
-                File.WriteAllText(filePath, "[]");
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    string json = reader.ReadToEnd();
+
+                    // Deserialize directly into 'pets' list
+                    pets = JsonConvert.DeserializeObject<List<PetBase>>(json, new PetConverter());
+                }
             }
-
-            string json = File.ReadAllText(filePath);
-
-            pets = JsonConvert.DeserializeObject<List<PetBase>>(json, new PetConverter());
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading pets from file: {ex.Message}");
+            }
         }
+
 
         private void SavePetsToFile()
         {
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, this.filePath);
 
             string json = JsonConvert.SerializeObject(pets, Formatting.Indented);
-            File.WriteAllText(filePath, json);
+
+            using (StreamWriter writer = new StreamWriter(filePath, false)) // Ensure the StreamWriter is properly disposed
+            {
+                writer.Write(json);
+                writer.Flush();
+            }
         }
+
 
         private void SetGameTickTimer()
         {

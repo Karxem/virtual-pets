@@ -63,20 +63,26 @@ namespace virtual_pet.Core.Manager
         {
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, this.filePath);
 
-            if (!File.Exists(filePath))
+            try
             {
-                File.WriteAllText(filePath, "[]");
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    string json = reader.ReadToEnd();
+
+                    var settings = new JsonSerializerSettings
+                    {
+                        Converters = new List<JsonConverter> { new ItemConverter() },
+                        TypeNameHandling = TypeNameHandling.Auto
+                    };
+
+                    // Deserialize directly into 'items' list
+                    items = JsonConvert.DeserializeObject<List<ItemBase>>(json, settings);
+                }
             }
-
-            string json = File.ReadAllText(filePath);
-
-            var settings = new JsonSerializerSettings
+            catch (Exception ex)
             {
-                Converters = new List<JsonConverter> { new ItemConverter() },
-                TypeNameHandling = TypeNameHandling.Auto
-            };
-
-            items = JsonConvert.DeserializeObject<List<ItemBase>>(json, settings);
+                Console.WriteLine($"Error loading items from file: {ex.Message}");
+            }
         }
 
         private void SaveItemsToFile()
@@ -84,7 +90,13 @@ namespace virtual_pet.Core.Manager
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, this.filePath);
 
             string json = JsonConvert.SerializeObject(items, Formatting.Indented);
-            File.WriteAllText(filePath, json);
+
+            using (StreamWriter writer = new StreamWriter(filePath, false)) // Ensure the StreamWriter is properly disposed
+            {
+                writer.Write(json);
+                writer.Flush();
+            }
         }
+
     }
 }
