@@ -170,6 +170,7 @@ namespace virtual_pet.Application
         {
             Console.Clear();
             ItemBase newItem = new HealingPotion(50);
+            newItem.AddItem(1);
             inventoryManager.SaveItem(newItem);
 
             Console.WriteLine(newItem.Name + " was added to your inventory!");
