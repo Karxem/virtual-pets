@@ -15,7 +15,6 @@ namespace virtual_pet.Core.Managers
         public PetManager()
         {
             filePath = LoadFilePath();
-
             pets = new List<PetBase>();
 
             LoadPets();
@@ -53,27 +52,15 @@ namespace virtual_pet.Core.Managers
         // Load a pet from file based on its name
         public PetBase LoadPet(string name)
         {
-            var loadedPetModel = pets.Find(p => p.Name == name);
+            var loadedPet = pets.Find(pets => pets.Name == name);
 
-            if (loadedPetModel == null)
+            if (loadedPet == null)
             {
                 Console.WriteLine($"Pet with name {name} not found.");
                 return null;
             }
 
-            // Create a new PetBase instance and set its state based on the loaded PetModel
-            PetBase pet = CreateNewPetInstance(loadedPetModel.Name, loadedPetModel.GetPetType());
-
-            pet.Health.Value = loadedPetModel.Health;
-            pet.Energy.Value = loadedPetModel.Energy;
-            pet.Attack.Value = loadedPetModel.Attack;
-            pet.Defense.Value = loadedPetModel.Defense;
-            pet.Hunger.Value = loadedPetModel.Hunger;
-            pet.Thirst.Value = loadedPetModel.Thirst;
-            pet.Experience.Value = loadedPetModel.Experience;
-            pet.Level.Value = loadedPetModel.Level;
-
-            return pet;
+            return loadedPet;
         }
 
         public List<PetBase> GetPets() => pets;
