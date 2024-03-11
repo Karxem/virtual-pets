@@ -35,7 +35,7 @@ namespace virtual_pet.Core.Manager
                 Console.WriteLine($"{i + 1}. {pets[i].Name}");
             }
 
-            int petIndex = Convert.ToInt32(Console.ReadLine()) - 1;
+            int petIndex = GetPlayerChoice(1, pets.Count) - 1;
             if (petIndex > pets.Count)
             {
                 return;
@@ -90,7 +90,7 @@ namespace virtual_pet.Core.Manager
                     break;
                 case 2:
                     Console.Clear();
-                    if(items.Count <= 0)
+                    if (items.Count <= 0)
                     {
                         Console.WriteLine("There are no items in your inventory!");
                         break;
@@ -102,8 +102,8 @@ namespace virtual_pet.Core.Manager
                         Console.WriteLine($"{i + 1}. {items[i].Name}");
                     }
 
-                    int itemIndex = Convert.ToInt32(Console.ReadLine()) - 1;
-                    if (itemIndex > items.Count)
+                    int itemIndex = GetPlayerChoice(1, items.Count) - 1;
+                    if (itemIndex < 0 || itemIndex >= items.Count)
                     {
                         return;
                     }
@@ -135,7 +135,15 @@ namespace virtual_pet.Core.Manager
             while (true)
             {
                 Console.Write("\nEnter your choice: ");
-                if (int.TryParse(Console.ReadLine(), out choice) && choice >= minValue && choice <= maxValue)
+                string input = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid choice.");
+                    continue;
+                }
+
+                if (int.TryParse(input, out choice) && choice >= minValue && choice <= maxValue)
                 {
                     break;
                 }
@@ -146,6 +154,7 @@ namespace virtual_pet.Core.Manager
             }
             return choice;
         }
+
 
         private int CalculateDamage(PetBase attacker, PetBase defender)
         {
