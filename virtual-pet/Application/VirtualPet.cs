@@ -2,10 +2,11 @@
 using virtual_pet.Core.Managers;
 using virtual_pet.Core.Render;
 using virtual_pet.Core;
-using virtual_pet.Core.Levels;
 using virtual_pet.Core.Utils;
 using virtual_pet.Core.Manager;
 using virtual_pet.Core.Entities.Items;
+using virtual_pet.Core.Entities.Common.Level;
+using virtual_pet.Core.Entities.Levels;
 
 namespace virtual_pet.Application
 {
@@ -28,8 +29,6 @@ namespace virtual_pet.Application
         static ConsoleMenu consoleMenu = new ConsoleMenu(onItemSelected, menuItems);
         static List<PetBase> pets = new List<PetBase>();
         static List<ItemBase> items = new List<ItemBase>();
-        
-        static bool running = true;
 
         static void Main()
         {
@@ -41,7 +40,7 @@ namespace virtual_pet.Application
             Console.CursorVisible = false;
             Engine.OpenMenu(consoleMenu);
 
-            while (running)
+            while (Engine.IsRunning)
             {
                 Renderer.ClearBuffers();
                 Engine.Tick();
@@ -79,7 +78,7 @@ namespace virtual_pet.Application
                     break;
                 case 5:
                     LevelBase level = new TestLevel();
-                    level.StartFight();
+                    level.StartLevel();
                     break;
                 case 6:
                     foreach (var pet in pets)
@@ -87,7 +86,6 @@ namespace virtual_pet.Application
                         petManager.SavePet(pet);
                     }
 
-                    running = false;
                     return;
                 default:
                     Console.WriteLine("An error occurred");
