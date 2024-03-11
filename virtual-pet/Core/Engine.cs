@@ -11,6 +11,8 @@ using virtual_pet.Core.Menu;
 namespace virtual_pet.Core {
     public class Engine {
 
+        string s = "▶◀▲▼✓╠╣║╚╝╔╗↲⇡⇣←↑→↓↔↕";
+
         private static PlayerController controller = new PlayerController();
 
         private static Stack<IInputListener> inputListeners = new Stack<IInputListener>();
