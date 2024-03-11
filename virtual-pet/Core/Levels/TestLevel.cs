@@ -2,7 +2,7 @@
 
 namespace virtual_pet.Core.Levels
 {
-    public class TestLevel : LevelBase
+    internal class TestLevel : LevelBase
     {
 
     }
