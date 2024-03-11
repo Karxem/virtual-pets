@@ -1,4 +1,5 @@
 ﻿using virtual_pet.Core.Entities.Common;
+using virtual_pet.Core.Entities.Items;
 using virtual_pet.Core.Managers;
 
 namespace virtual_pet.Core.Manager
@@ -6,11 +7,15 @@ namespace virtual_pet.Core.Manager
 	internal class CombatManager
 	{
         private static readonly PetManager petManager = new PetManager();
+        private static readonly InventoryManager inventoryManager = new InventoryManager();
+        
+        private static List<ItemBase> items;
         private static Random random;
 
         public CombatManager()
         {
             random = new Random();
+            items = inventoryManager.GetItems();
         }
         
         public void HandleFight(List<PetBase> pets)
@@ -84,8 +89,27 @@ namespace virtual_pet.Core.Manager
                     Console.WriteLine($"\n{playerPet.Name} dealt {damageDealt} damage to {enemyPet.Name}!");
                     break;
                 case 2:
-                    // Logic for using items here
-                    Console.WriteLine("You used an item!");
+                    Console.Clear();
+                    if(items.Count <= 0)
+                    {
+                        Console.WriteLine("There are no items in your inventory!");
+                        break;
+                    }
+
+                    Console.WriteLine("Which item do you want to use?");
+                    for (int i = 0; i < items.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {items[i].Name}");
+                    }
+
+                    int itemIndex = Convert.ToInt32(Console.ReadLine()) - 1;
+                    if (itemIndex > items.Count)
+                    {
+                        return;
+                    }
+
+                    ItemBase item = inventoryManager.LoadItem(items[itemIndex].Name);
+                    item.UseItem(playerPet);
                     break;
                 case 3:
                     Console.WriteLine("You ran away from the battle!");

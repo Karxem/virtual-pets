@@ -2,28 +2,33 @@
 using virtual_pet.Core.Managers;
 using virtual_pet.Core.Render;
 using virtual_pet.Core;
-using virtual_pet.Core.Entities.Pets;
 using virtual_pet.Core.Levels;
 using virtual_pet.Core.Utils;
+using virtual_pet.Core.Manager;
+using virtual_pet.Core.Entities.Items;
 
 namespace virtual_pet.Application
 {
     public class VirtualPets
     {
+        static PetManager petManager = new PetManager();
+        static InventoryManager inventoryManager = new InventoryManager();
+
         static List<string> menuItems = new List<string>
         {
             "Show Pet Overview",
             "Fill all pet stats",
-            "Add a pet",
+            "Add pet",
+            "Add item",
             "Gain experience",
             "Test first level",
             "Exit"
         };
 
-        static PetManager petManager = new PetManager();
-        static List<PetBase> pets = new List<PetBase>();
         static ConsoleMenu consoleMenu = new ConsoleMenu(onItemSelected, menuItems);
-
+        static List<PetBase> pets = new List<PetBase>();
+        static List<ItemBase> items = new List<ItemBase>();
+        
         static bool running = true;
 
         static void Main()
@@ -31,6 +36,7 @@ namespace virtual_pet.Application
             Engine.Init();
             Renderer.Init();
             pets = petManager.GetPets();
+            items = inventoryManager.GetItems();
 
             Console.CursorVisible = false;
             Engine.OpenMenu(consoleMenu);
@@ -61,20 +67,27 @@ namespace virtual_pet.Application
                     AddNewPet();
                     break;
                 case 3:
-                    GainExperience(pets);
+                    AddNewItem();
+
+                    foreach (var item in items)
+                    {
+                        Console.WriteLine(item.Name);
+                    }
                     break;
                 case 4:
+                    GainExperience(pets);
+                    break;
+                case 5:
                     LevelBase level = new TestLevel();
                     level.StartFight();
                     break;
-                case 5:
+                case 6:
                     foreach (var pet in pets)
                     {
                         petManager.SavePet(pet);
                     }
 
                     running = false;
-
                     return;
                 default:
                     Console.WriteLine("An error occurred");
@@ -153,7 +166,14 @@ namespace virtual_pet.Application
             Console.WriteLine($"Your new pet {petName} of type {petType} was added");
         }
 
+        private static void AddNewItem()
+        {
+            Console.Clear();
+            ItemBase newItem = new HealingPotion(50);
+            inventoryManager.SaveItem(newItem);
 
+            Console.WriteLine(newItem.Name + " was added to your inventory!");
+        }
         private static void GainExperience(List<PetBase> pets)
         {
             Console.Clear();
