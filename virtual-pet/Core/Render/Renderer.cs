@@ -35,13 +35,14 @@ namespace virtual_pet.Core.Render
 
         }
 
-        static  StreamWriter writer = new StreamWriter(Console.OpenStandardOutput());
+        static  StreamWriter writer = new StreamWriter(Console.OpenStandardOutput(), Encoding.Unicode);
 
 
         public static List<Buffer> buffers = new();
 
-        public void Init() {
+        public static void Init() {
             
+            Console.OutputEncoding = Encoding.Unicode;
         }
 
         public static void FitToScreen() {
@@ -93,6 +94,7 @@ namespace virtual_pet.Core.Render
         
         public static void Render()
         {
+            
             
             StringBuilder builder = new StringBuilder();
             //builder.Clear();

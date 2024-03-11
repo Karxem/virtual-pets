@@ -37,6 +37,7 @@ namespace virtual_pet.Application {
             //debugTextInput = debugMenu.CreateTextInputItem(onDebugTextInput, "Debug Text Input Item").Input;
 
             Engine.Init();
+            Renderer.Init();
             //int selectedIndex = consoleMenu.ShowMenu();
             pets = petManager.GetPets();
             //PassInput(mainListener);
