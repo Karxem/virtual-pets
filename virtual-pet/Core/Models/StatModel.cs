@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace virtual_pet.Core.Models
+﻿namespace virtual_pet.Core.Models
 {
     internal class StatModel
     {
