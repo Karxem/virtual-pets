@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using virtual_pet.Core.GameEngine.Common;
-using virtual_pet.Core.GameEngine.Input;
+using virtual_pet.Core.Engine.Common;
+using virtual_pet.Core.Engine.Input;
 
-namespace virtual_pet.Core.GameEngine.Menu
+namespace virtual_pet.Core.Engine.Menu
 {
     public class TextInputItem : MenuItemBase
     {

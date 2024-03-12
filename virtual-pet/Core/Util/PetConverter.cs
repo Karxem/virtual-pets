@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Reflection;
-using virtual_pet.Core.Entities.Common;
+using virtual_pet.Core.Entity.Common;
 
 internal class PetConverter : JsonConverter<PetBase>
 {

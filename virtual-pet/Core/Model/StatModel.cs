@@ -1,4 +1,4 @@
-﻿namespace virtual_pet.Core.Models
+﻿namespace virtual_pet.Core.Model
 {
     public class StatModel
     {

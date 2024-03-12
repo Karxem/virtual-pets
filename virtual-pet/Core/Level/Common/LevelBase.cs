@@ -1,9 +1,8 @@
-﻿using virtual_pet.Core.GameEngine.Render;
-using virtual_pet.Core.Entities.Common;
-using virtual_pet.Core.Manager;
-using virtual_pet.Core.Managers;
-using virtual_pet.Core.Models;
+﻿using virtual_pet.Core.Manager;
 using virtual_pet.Core.GameEngine.Common;
+using virtual_pet.Core.Model;
+using virtual_pet.Core.Entity.Common;
+using virtual_pet.Core.Engine.Render;
 
 namespace virtual_pet.Core.Level.Common
 {
@@ -32,7 +31,7 @@ namespace virtual_pet.Core.Level.Common
             HandleEvent(LevelEvent.ShopVisit);//e);
         }
 
-        public virtual void Display(GameEngine.Render.Buffer buffer)
+        public virtual void Display(Engine.Render.Buffer buffer)
         {
             if (IsShopOpen)
             {

@@ -1,7 +1,6 @@
 ﻿using System;
-using virtual_pet.Core.Entities.Common;
 
-namespace virtual_pet.Core.Entities.Items
+namespace virtual_pet.Core.Entity.Common
 {
     public abstract class ItemBase
     {

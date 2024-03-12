@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using virtual_pet.Core.GameEngine.Tilemap;
+using virtual_pet.Core.Engine.Tilemap;
 
-namespace virtual_pet.Core.GameEngine.Collidable
+namespace virtual_pet.Core.Engine.Collidable
 {
     public interface ICollidable
     {

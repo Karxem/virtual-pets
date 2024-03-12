@@ -1,4 +1,4 @@
-﻿namespace virtual_pet.Core.GameEngine.Input
+﻿namespace virtual_pet.Core.Engine.Input
 {
     public interface IInputListener
     {

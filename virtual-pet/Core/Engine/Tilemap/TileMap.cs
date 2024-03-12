@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace virtual_pet.Core.GameEngine.Tilemap
+namespace virtual_pet.Core.Engine.Tilemap
 {
     public class TileMap
     {

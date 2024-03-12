@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using System.Transactions;
-using virtual_pet.Core.GameEngine.Render;
+using virtual_pet.Core.Engine.Render;
 
-namespace virtual_pet.Core.GameEngine.Input
+namespace virtual_pet.Core.Engine.Input
 {
     public class TextInput : IInputListener, IDisplayable
     {

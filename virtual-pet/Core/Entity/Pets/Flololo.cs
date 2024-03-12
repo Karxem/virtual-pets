@@ -1,6 +1,6 @@
-﻿using virtual_pet.Core.Entities.Common;
+﻿using virtual_pet.Core.Entity.Common;
 
-namespace virtual_pet.Core.Entities.Pets
+namespace virtual_pet.Core.Entity.Pets
 {
     internal class Flololo : PetBase
     {
@@ -10,7 +10,7 @@ namespace virtual_pet.Core.Entities.Pets
         }
         public override void UseAbility()
         {
-            Console.WriteLine(this.Name + " used its ability!");
+            Console.WriteLine(Name + " used its ability!");
         }
 
     }
