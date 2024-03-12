@@ -1,7 +1,7 @@
 ﻿using virtual_pet.Core.Entities.Common.Level;
 using virtual_pet.Core.Entities.Items;
-using virtual_pet.Core.Manager;
 using virtual_pet.Core.Models;
+using virtual_pet.Core.Render;
 
 namespace virtual_pet.Core.Entities.Levels
 {
@@ -17,12 +17,12 @@ namespace virtual_pet.Core.Entities.Levels
 
         public override void StartFight()
         {
-            Console.WriteLine("Fight!");
+            Renderer.MainBuffer.WriteLine("Fight!");
         }
 
         public override void VisitShop()
         {
-            Console.WriteLine("Shopping time!");
+            Renderer.PlayBuffer.WriteLine("Shopping time!");
 
             List<ItemBase> shopItems = new List<ItemBase>();
             shopItems.Add(new HealingPotion(1));

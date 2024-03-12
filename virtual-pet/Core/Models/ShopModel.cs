@@ -1,4 +1,5 @@
 ﻿using virtual_pet.Core.Entities.Items;
+using virtual_pet.Core.Render;
 
 namespace virtual_pet.Core.Models
 {
@@ -13,10 +14,10 @@ namespace virtual_pet.Core.Models
 
         public void DisplayAvailableItems()
         {
-            Console.WriteLine("Welcome to the shop. What would you like to do?");
+            Renderer.MainBuffer.WriteLine("Welcome to the shop. What would you like to do?");
             foreach (ItemBase item in availableItems)
             {
-                Console.WriteLine(item.Name);
+                Renderer.MainBuffer.WriteLine(item.Name);
             }
         }
 

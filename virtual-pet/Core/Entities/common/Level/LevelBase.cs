@@ -1,5 +1,6 @@
 ﻿using virtual_pet.Core.Manager;
 using virtual_pet.Core.Managers;
+using virtual_pet.Core.Render;
 
 namespace virtual_pet.Core.Entities.Common.Level
 {
@@ -22,7 +23,7 @@ namespace virtual_pet.Core.Entities.Common.Level
         public void StartLevel()
         {
             LevelEvent e = EventGenerator.GenerateRandomEvent();
-            Console.WriteLine(e.ToString());
+            Renderer.PlayBuffer.WriteLine(e.ToString());
             HandleEvent(e);
         }
         private void HandleEvent(LevelEvent e)
@@ -36,7 +37,7 @@ namespace virtual_pet.Core.Entities.Common.Level
                     VisitShop();
                     break;
                 default:
-                    Console.WriteLine("Invalid LevelEvent was passed.");
+                    Renderer.PlayBuffer.WriteLine("Invalid LevelEvent was passed.");
                     break;
             }
         }
