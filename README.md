@@ -5,6 +5,7 @@ Welcome to the Virtual Pet Console Game! This is a console application written i
 
 We took upon a fairly basic task in school and decided to make it more fun.  
 It's designed to provide a simple and fun experience similar to a console-based Pokémon game.  
+
 Take care of your virtual pet, train it, and engage in battles with other virtual pets.  
 
 ## Getting Started
