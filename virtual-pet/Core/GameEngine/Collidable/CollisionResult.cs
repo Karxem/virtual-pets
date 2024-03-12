@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace virtual_pet.Core.Engine.Collidable
+namespace virtual_pet.Core.GameEngine.Collidable
 {
     public struct CollisionResult
     {

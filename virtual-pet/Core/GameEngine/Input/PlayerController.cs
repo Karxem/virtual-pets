@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace virtual_pet.Core.Engine.Input
+namespace virtual_pet.Core.GameEngine.Input
 {
     public class PlayerController
     {

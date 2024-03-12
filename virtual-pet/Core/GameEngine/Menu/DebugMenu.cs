@@ -1,7 +1,7 @@
 ﻿using virtual_pet.Core.GameEngine.Render;
 using virtual_pet.Core.GameEngine.Common;
 
-namespace virtual_pet.Core.Engine.Menu
+namespace virtual_pet.Core.GameEngine.Menu
 {
     public class DebugMenu
     {

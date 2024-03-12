@@ -2,7 +2,7 @@
 using virtual_pet.Core.GameEngine.Input;
 using virtual_pet.Core.GameEngine.Render;
 
-namespace virtual_pet.Core.Engine.Common
+namespace virtual_pet.Core.GameEngine.Common
 {
     internal abstract class EntityBase : IInputListener, IDisplayable
     {

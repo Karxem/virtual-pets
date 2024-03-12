@@ -1,4 +1,4 @@
-﻿namespace virtual_pet.Core.Level.Enum
+﻿namespace virtual_pet.Core.Level.Enums
 {
 
 }
