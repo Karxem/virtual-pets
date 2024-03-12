@@ -1,4 +1,4 @@
-﻿internal enum BiomeType
+﻿public enum BiomeType
 {
     ForestPath,
     City,

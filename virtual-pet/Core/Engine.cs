@@ -2,6 +2,7 @@
 using virtual_pet.Core.Render;
 using virtual_pet.Core.Utils;
 using virtual_pet.Core.Menu;
+using virtual_pet.Core.Entities.Common.Level;
 
 namespace virtual_pet.Core {
     public class Engine {
@@ -20,7 +21,13 @@ namespace virtual_pet.Core {
 
         private static OptionStrip? currentOtionStrip;
 
+        private static LevelBase? currentLevel;
+
         public static bool IsRunning { get; private set;  } = false;
+
+        public static void setCurrentLevel(LevelBase level) {
+            currentLevel = level;
+        }
 
 
         public static void Init() {
@@ -38,6 +45,7 @@ namespace virtual_pet.Core {
             }
             currentMenu?.Display(Renderer.MenuBuffer);
             currentOtionStrip?.Display(Renderer.OptionStripBuffer);
+            currentLevel?.Display(Renderer.PlayBuffer);
         }
 
         public static void AddDisplayable(IDisplayable displayable) {

@@ -1,29 +1,45 @@
-﻿using virtual_pet.Core.Entities.Items;
+﻿using System.Reflection.Metadata.Ecma335;
+using virtual_pet.Core.Entities.Common.Level;
+using virtual_pet.Core.Entities.Items;
 using virtual_pet.Core.Render;
+using virtual_pet.Core.Utils;
 
 namespace virtual_pet.Core.Models
 {
-    internal class Shop
+    public class Shop : ConsoleMenu
     {
         private List<ItemBase> availableItems;
+        private LevelBase owner;
 
-        public Shop(List<ItemBase> items)
-        {
+        public Shop(LevelBase owner, List<ItemBase> items) {
+            this.UseDefaultHandler = false;
+            this.onItemSelected += menuHandler;
+            this.owner = owner;
             availableItems = items;
+
+            for(int i=0; i < items.Count; i++)
+            {
+                this.CreateClickItem(items[i].Name + " [" + items[i].Count+"]", onItemSelection);
+            }
         }
 
-        public void DisplayAvailableItems()
-        {
-            Renderer.MainBuffer.WriteLine("Welcome to the shop. What would you like to do?");
-            foreach (ItemBase item in availableItems)
+        private void menuHandler(object sender, int id) {
+            if(id == ACTION_CLOSE)
             {
-                Renderer.MainBuffer.WriteLine(item.Name);
+                owner.CloseShop();
+                return;
             }
+            base.DefaultItemSelected(id);
+        }
+
+        private void onItemSelection(object sender, string text) {
+            ClickItem item = (ClickItem) sender;
+            SellItem(availableItems[item.Id]);
+            item.Text = availableItems[item.Id].Name + " [" + availableItems[item.Id].Count + "]";
         }
 
         public void SellItem(ItemBase item)
         {
-            // Logic to sell an item to the player's pet
         }
     }
 }

@@ -78,6 +78,7 @@ namespace virtual_pet.Application
                     break;
                 case 5:
                     LevelBase level = new TestLevel();
+                    Engine.setCurrentLevel(level);
                     level.StartLevel();
                     break;
                 case 6:
@@ -86,6 +87,7 @@ namespace virtual_pet.Application
                         petManager.SavePet(pet);
                     }
 
+                    Environment.Exit(0);
                     return;
                 default:
                     Console.WriteLine("An error occurred");
@@ -93,7 +95,7 @@ namespace virtual_pet.Application
             }
 
             Renderer.MainBuffer.WriteLine("\nPress Enter to go back to the main menu...");
-            Console.ReadLine();
+            //Console.ReadLine(); // Stop it, get some help
         }
 
         private static void ShowPetOverview(List<PetBase> pets)
