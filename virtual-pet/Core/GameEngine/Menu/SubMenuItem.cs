@@ -12,12 +12,12 @@ namespace virtual_pet.Core.Engine.Menu
 
         public void Open()
         {
-            Engine.OpenMenu(Menu);
+            GameEngine.OpenMenu(Menu);
         }
 
         public void Close()
         {
-            Engine.CloseMenu();
+            GameEngine.CloseMenu();
         }
 
     }

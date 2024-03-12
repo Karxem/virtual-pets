@@ -1,6 +1,4 @@
-﻿internal enum LevelEvent
+﻿namespace virtual_pet.Core.Level.Enum
 {
-    WildPetAttack,
-    ShopVisit,
-    DefaultEvent
+
 }

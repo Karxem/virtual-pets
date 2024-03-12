@@ -1,12 +1,11 @@
-﻿using virtual_pet.Core.Entities.Common;
-using virtual_pet.Core.Managers;
-using virtual_pet.Core.Manager;
-using virtual_pet.Core.Entities.Items;
+﻿using virtual_pet.Core.Manager;
 using virtual_pet.Core.Level.Common;
-using virtual_pet.Core.GameEngine.Render;
-using virtual_pet.Core.GameEngine.Menu;
 using virtual_pet.Core.Level;
+using virtual_pet.Core.Entity.Common;
 using virtual_pet.Core.GameEngine.Common;
+using virtual_pet.Core.GameEngine.Menu;
+using virtual_pet.Core.GameEngine.Render;
+using virtual_pet.Core.Entity.Items;
 
 namespace virtual_pet.Application
 {

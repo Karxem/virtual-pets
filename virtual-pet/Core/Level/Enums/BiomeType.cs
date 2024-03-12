@@ -1,5 +1,8 @@
-﻿public enum BiomeType
+﻿namespace virtual_pet.Core.Level.Enum
 {
-    ForestPath,
-    City,
+    public enum BiomeType
+    {
+        ForestPath,
+        City,
+    }
 }

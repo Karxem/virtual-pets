@@ -1,10 +1,8 @@
-﻿using virtual_pet.Core.Entities.Common;
-using virtual_pet.Core.Entities.Items;
-using virtual_pet.Core.Managers;
+﻿using virtual_pet.Core.Entity.Common;
 
 namespace virtual_pet.Core.Manager
 {
-	internal class CombatManager
+    internal class CombatManager
 	{
         private static readonly PetManager petManager = new PetManager();
         private static readonly InventoryManager inventoryManager = new InventoryManager();

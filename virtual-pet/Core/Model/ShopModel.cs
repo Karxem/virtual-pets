@@ -1,6 +1,6 @@
 ﻿using virtual_pet.Core.Level.Common;
 using virtual_pet.Core.Entity.Common;
-using virtual_pet.Core.Engine.Menu;
+using virtual_pet.Core.GameEngine.Menu;
 
 namespace virtual_pet.Core.Model
 {

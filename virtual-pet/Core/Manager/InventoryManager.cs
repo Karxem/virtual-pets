@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
-using virtual_pet.Core.Entities.Items;
-using virtual_pet.Core.Utils;
+using virtual_pet.Core.Entity.Common;
+using virtual_pet.Core.Util;
 
 namespace virtual_pet.Core.Manager
 {
