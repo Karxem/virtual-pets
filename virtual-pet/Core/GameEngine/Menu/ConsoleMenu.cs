@@ -174,7 +174,7 @@ namespace virtual_pet.Core.Engine.Menu
                     MoveSelectionRight();
                     return;
                 case ACTION_CLOSE:
-                    Engine.CloseMenu();
+                    GameEngine.CloseMenu();
                     return;
                 default:
                     return;
@@ -196,12 +196,12 @@ namespace virtual_pet.Core.Engine.Menu
             }
             if (item is TextInputItem)
             {
-                Engine.PassInput((item as TextInputItem).Input);
+                GameEngine.PassInput((item as TextInputItem).Input);
                 return;
             }
             if (item is SubMenuItem)
             {
-                Engine.OpenMenu((item as SubMenuItem).Menu);
+                GameEngine.OpenMenu((item as SubMenuItem).Menu);
                 return;
             }
         }

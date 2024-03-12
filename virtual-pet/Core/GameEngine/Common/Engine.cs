@@ -1,7 +1,7 @@
 ﻿using virtual_pet.Core.Level.Common;
-using virtual_pet.Core.Engine.Input;
-using virtual_pet.Core.Engine.Menu;
-using virtual_pet.Core.Engine.Render;
+using virtual_pet.Core.GameEngine.Input;
+using virtual_pet.Core.GameEngine.Menu;
+using virtual_pet.Core.GameEngine.Render;
 
 namespace virtual_pet.Core.Engine.Common
 {

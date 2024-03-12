@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
-using virtual_pet.Core.Engine.Input;
-using virtual_pet.Core.Engine.Render;
+using virtual_pet.Core.GameEngine.Input;
+using virtual_pet.Core.GameEngine.Render;
 
 namespace virtual_pet.Core.Engine.Common
 {

@@ -1,8 +1,8 @@
-﻿using virtual_pet.Core.Entities.Items;
-using virtual_pet.Core.Level.Common;
+﻿using virtual_pet.Core.Level.Common;
 using virtual_pet.Core.Entity.Common;
 using virtual_pet.Core.Model;
-using virtual_pet.Core.Engine.Render;
+using virtual_pet.Core.GameEngine.Render;
+using virtual_pet.Core.Entity.Items;
 
 namespace virtual_pet.Core.Level
 {

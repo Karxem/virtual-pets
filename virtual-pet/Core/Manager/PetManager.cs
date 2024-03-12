@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System.Reflection;
 using System.Timers;
-using virtual_pet.Core.Entities.Common;
+using virtual_pet.Core.Entity.Common;
 
-namespace virtual_pet.Core.Managers
+namespace virtual_pet.Core.Manager
 {
     internal class PetManager
     {
@@ -173,7 +173,7 @@ namespace virtual_pet.Core.Managers
             timer.Enabled = true;
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             var pets = GetPets();
             foreach (var pet in pets)

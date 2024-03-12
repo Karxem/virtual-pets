@@ -1,4 +1,4 @@
-﻿using virtual_pet.Core.Engine.Render;
+﻿using virtual_pet.Core.GameEngine.Render;
 using virtual_pet.Core.GameEngine.Common;
 
 namespace virtual_pet.Core.Engine.Menu
@@ -30,17 +30,17 @@ namespace virtual_pet.Core.Engine.Menu
 
         private void onDebugPrint(object sender, string text)
         {
-            if (Engine.ContainsDisplayable(debugPrint))
+            if (GameEngine.ContainsDisplayable(debugPrint))
             {
-                Engine.RemoveDisplayable(debugPrint);
+                GameEngine.RemoveDisplayable(debugPrint);
                 return;
             }
-            Engine.CloseMenu();
+            GameEngine.CloseMenu();
         }
 
         private void onDebugTextInput(object sender, string text)
         {
-            Engine.PopInput();
+            GameEngine.PopInput();
         }
     }
 }
