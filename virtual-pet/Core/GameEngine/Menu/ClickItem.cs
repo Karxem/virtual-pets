@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using virtual_pet.Core.Engine.Common;
+using virtual_pet.Core.GameEngine.Common;
 
-namespace virtual_pet.Core.Engine.Menu
+namespace virtual_pet.Core.GameEngine.Menu
 {
     public class ClickItem : MenuItemBase
     {

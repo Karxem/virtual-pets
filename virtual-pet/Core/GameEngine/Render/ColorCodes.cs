@@ -6,7 +6,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace virtual_pet.Core.Engine.Render
+namespace virtual_pet.Core.GameEngine.Render
 {
 
     /*
