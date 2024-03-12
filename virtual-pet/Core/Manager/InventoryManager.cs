@@ -8,6 +8,8 @@ namespace virtual_pet.Core.Manager
     {
         private readonly string filePath;
         private List<ItemBase> items;
+        private readonly int NumberOfRetries = 3;
+        private readonly int DelayOnRetry = 1000;
 
         public InventoryManager()
         {
@@ -91,10 +93,22 @@ namespace virtual_pet.Core.Manager
 
             string json = JsonConvert.SerializeObject(items, Formatting.Indented);
 
-            using (StreamWriter writer = new StreamWriter(filePath, false)) // Ensure the StreamWriter is properly disposed
+            for (int i = 1; i <= NumberOfRetries; ++i)
             {
-                writer.Write(json);
-                writer.Flush();
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(filePath, false)) // Ensure the StreamWriter is properly disposed
+                    {
+                        writer.Write(json);
+                        writer.Flush();
+                    }
+                    break; // When done we can break loop
+                }
+                catch (IOException e) when (i <= NumberOfRetries)
+                {
+                    Console.WriteLine(e.Message);
+                    Thread.Sleep(DelayOnRetry);
+                }
             }
         }
 

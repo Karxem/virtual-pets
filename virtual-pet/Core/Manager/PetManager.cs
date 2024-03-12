@@ -11,6 +11,8 @@ namespace virtual_pet.Core.Managers
         private static System.Timers.Timer timer;
         private static readonly int interval = 10000;
         private List<PetBase> pets;
+        private readonly int NumberOfRetries = 3;
+        private readonly int DelayOnRetry = 1000;
 
         public PetManager()
         {
@@ -143,10 +145,22 @@ namespace virtual_pet.Core.Managers
 
             string json = JsonConvert.SerializeObject(pets, Formatting.Indented);
 
-            using (StreamWriter writer = new StreamWriter(filePath, false)) // Ensure the StreamWriter is properly disposed
+            for (int i = 1; i <= NumberOfRetries; ++i)
             {
-                writer.Write(json);
-                writer.Flush();
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(filePath, false)) // Ensure the StreamWriter is properly disposed
+                    {
+                        writer.Write(json);
+                        writer.Flush();
+                    }
+                    break;
+                }
+                catch (IOException e) when (i <= NumberOfRetries)
+                {
+                    Console.WriteLine(e.Message);
+                    Thread.Sleep(DelayOnRetry);
+                }
             }
         }
 
