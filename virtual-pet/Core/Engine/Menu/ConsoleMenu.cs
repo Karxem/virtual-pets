@@ -1,9 +1,9 @@
-﻿using virtual_pet.Core.GameEngine.Common;
-using virtual_pet.Core.GameEngine.Input;
-using virtual_pet.Core.GameEngine.Render;
-using static virtual_pet.Core.GameEngine.Input.KeyBindings.MenuBindings;
+﻿using virtual_pet.Core.Engine.Common;
+using virtual_pet.Core.Engine.Input;
+using virtual_pet.Core.Engine.Render;
+using static virtual_pet.Core.Engine.Input.KeyBindings.MenuBindings;
 
-namespace virtual_pet.Core.GameEngine.Menu
+namespace virtual_pet.Core.Engine.Menu
 {
     public class ConsoleMenu : IInputListener, IDisplayable
     {

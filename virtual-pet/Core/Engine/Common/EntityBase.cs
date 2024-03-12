@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
-using virtual_pet.Core.GameEngine.Render;
-using virtual_pet.Core.GameEngine.Input;
+using virtual_pet.Core.Engine.Input;
+using virtual_pet.Core.Engine.Render;
 
-namespace virtual_pet.Core.GameEngine.Common
+namespace virtual_pet.Core.Engine.Common
 {
     internal abstract class EntityBase : IInputListener, IDisplayable
     {

@@ -1,7 +1,8 @@
-﻿using virtual_pet.Core.GameEngine.Render;
-using virtual_pet.Core.Entities.Items;
+﻿using virtual_pet.Core.Entities.Items;
 using virtual_pet.Core.Level.Common;
-using virtual_pet.Core.Models;
+using virtual_pet.Core.Entity.Common;
+using virtual_pet.Core.Model;
+using virtual_pet.Core.Engine.Render;
 
 namespace virtual_pet.Core.Level
 {
@@ -19,7 +20,7 @@ namespace virtual_pet.Core.Level
             Renderer.MainBuffer.WriteLine("Fight!");
         }
 
-        public override void Display(GameEngine.Render.Buffer buffer)
+        public override void Display(Engine.Render.Buffer buffer)
         {
             buffer.WriteLine("Shopping time!");
             base.Display(buffer);

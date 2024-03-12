@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace virtual_pet.Core.GameEngine.Render
+namespace virtual_pet.Core.Engine.Render
 {
     public class Buffer : IDisposable
     {

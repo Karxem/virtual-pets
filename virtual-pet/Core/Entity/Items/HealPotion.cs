@@ -1,7 +1,7 @@
-﻿using virtual_pet.Core.Entities.Common;
-using virtual_pet.Core.Managers;
+﻿using virtual_pet.Core.Entity.Common;
+using virtual_pet.Core.Manager;
 
-namespace virtual_pet.Core.Entities.Items
+namespace virtual_pet.Core.Entity.Items
 {
     internal class HealingPotion : ItemBase
     {

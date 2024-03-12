@@ -1,15 +1,16 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using virtual_pet.Core.Entities.Items;
+using virtual_pet.Core.Entity.Common;
+using virtual_pet.Core.Entity.Items;
 
-namespace virtual_pet.Core.Utils
+namespace virtual_pet.Core.Util
 {
     internal class ItemConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(ItemBase));
+            return objectType == typeof(ItemBase);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

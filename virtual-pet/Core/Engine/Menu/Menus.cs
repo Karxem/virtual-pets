@@ -1,4 +1,4 @@
-﻿namespace virtual_pet.Core.GameEngine.Menu
+﻿namespace virtual_pet.Core.Engine.Menu
 {
     /**
      * container class for menu declarations

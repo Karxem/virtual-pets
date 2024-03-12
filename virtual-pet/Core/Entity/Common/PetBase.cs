@@ -1,7 +1,7 @@
-﻿using virtual_pet.Core.Managers;
-using virtual_pet.Core.Models;
+﻿using virtual_pet.Core.Manager;
+using virtual_pet.Core.Model;
 
-namespace virtual_pet.Core.Entities.Common
+namespace virtual_pet.Core.Entity.Common
 {
     public abstract class PetBase
     {

@@ -1,6 +1,6 @@
-﻿using virtual_pet.Core.GameEngine.Common;
+﻿using virtual_pet.Core.Engine.Common;
 
-namespace virtual_pet.Core.GameEngine.Menu
+namespace virtual_pet.Core.Engine.Menu
 {
     public class SubMenuItem : MenuItemBase
     {

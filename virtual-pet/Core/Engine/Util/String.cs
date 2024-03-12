@@ -5,7 +5,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace virtual_pet.Core.GameEngine.Util
+namespace virtual_pet.Core.Engine.Util
 {
     public class String
     {

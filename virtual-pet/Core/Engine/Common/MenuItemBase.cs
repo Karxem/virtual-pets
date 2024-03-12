@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using virtual_pet.Core.GameEngine.Render;
+using virtual_pet.Core.Engine.Render;
 
-namespace virtual_pet.Core.GameEngine.Common
+namespace virtual_pet.Core.Engine.Common
 {
     public abstract class MenuItemBase : IDisplayable
     {
