@@ -1,6 +1,6 @@
 ﻿namespace virtual_pet.Core.Models
 {
-    internal class StatModel
+    public class StatModel
     {
         private double _value;
         private double _minValue;

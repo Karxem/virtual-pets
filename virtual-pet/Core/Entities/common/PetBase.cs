@@ -3,7 +3,7 @@ using virtual_pet.Core.Models;
 
 namespace virtual_pet.Core.Entities.Common
 {
-    internal abstract class PetBase
+    public abstract class PetBase
     {
         private static readonly PetManager petManager = new PetManager();
         private static Random random = new Random();

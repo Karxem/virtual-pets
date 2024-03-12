@@ -11,7 +11,7 @@ namespace virtual_pet.Core.Utils
         public const int ACTION_MOVE_LEFT = -4;
         public const int ACTION_MOVE_RIGHT = -5;
 
-        //╠╣║╚╝╔╗↲⇡⇣
+        // ╠╣║╚╝╔╗↲⇡⇣
         public delegate void ItemSelected(object sender, int selectedItemIndex);
         public event ItemSelected onItemSelected;
 
@@ -26,11 +26,11 @@ namespace virtual_pet.Core.Utils
             new OptionStripItem(Return)
         };
 
-        private OptionStrip optionStrip;
-        private List<MenuItemBase> menuItems;
-        private int selectedItemIndex;
-        private int itemsPerPage = 6;
-        private int currentPage = 0;
+        protected OptionStrip optionStrip;
+        protected List<MenuItemBase> menuItems;
+        protected int selectedItemIndex;
+        protected int itemsPerPage = 6;
+        protected int currentPage = 0;
 
         public bool IsActive { get; set; }
 
@@ -198,7 +198,7 @@ namespace virtual_pet.Core.Utils
 
         public OptionStrip? GetOptionStrip() => optionStrip;
 
-        public void Display(Render.Buffer buffer) {
+        public virtual void Display(Render.Buffer buffer) {
             string arrow = "", leftBar = "";//, rightBar = "";
             for (int i = currentPage * itemsPerPage; i < (currentPage * itemsPerPage) + itemsPerPage && i < menuItems.Count; i++)
             {

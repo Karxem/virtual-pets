@@ -11,8 +11,6 @@ namespace virtual_pet.Core.Utils {
         public static Dictionary<string, object> ConstantVars = new Dictionary<string, object>();
         public static Dictionary<string, string> Strings = new Dictionary<string, string>();
 
-        
-        
         public static void Init() {
             Strings.Add("ACTION_USE", "Press [&&ACTION_BUTTON] to use [&0]");
             ConstantVars.Add("ACTION_BUTTON", "E");

@@ -20,15 +20,22 @@ namespace virtual_pet.Core.Entities.Levels
             Renderer.MainBuffer.WriteLine("Fight!");
         }
 
+        public override void Display(Render.Buffer buffer) {
+            buffer.WriteLine("Shopping time!");
+            base.Display(buffer);
+        }
+
         public override void VisitShop()
         {
             Renderer.PlayBuffer.WriteLine("Shopping time!");
 
             List<ItemBase> shopItems = new List<ItemBase>();
-            shopItems.Add(new HealingPotion(1));
-            shop = new ShopManager().CreateShop(shopItems);
+            shopItems.Add(new HealingPotion(10) { Count = 1 });
+            shopItems.Add(new HealingPotion(50) { Count = 1 });
+            shopItems.Add(new HealingPotion(80) { Count = 1 });
+            shop = new ShopManager().CreateShop(this, shopItems);
 
-            shop.DisplayAvailableItems();
+            OpenShop(shop);
         }
     }
 }

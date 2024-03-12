@@ -3,7 +3,7 @@ using virtual_pet.Core.Entities.Common;
 
 namespace virtual_pet.Core.Entities.Items
 {
-    internal abstract class ItemBase
+    public abstract class ItemBase
     {
         public abstract string Name { get; }
         public abstract string Description { get; }
