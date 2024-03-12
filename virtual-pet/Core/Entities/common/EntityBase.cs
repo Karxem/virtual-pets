@@ -12,8 +12,8 @@ namespace virtual_pet.Core.Entities.Common {
 
         public bool IsActive { get; set; }
 
-        public Render.Vector2 Position { get; set; } = new Render.Vector2();
-        public Render.Vector2 Direction { get; set; } = new Render.Vector2();
+        public Vector2 Position { get; set; } = new Vector2();
+        public Vector2 Direction { get; set; } = new Vector2();
 
         private OptionStrip optionStrip = new OptionStrip(
             //new OptionStripItem()
