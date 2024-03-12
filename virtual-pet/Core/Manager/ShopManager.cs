@@ -1,5 +1,5 @@
-﻿using virtual_pet.Core.Entities.Common.Level;
-using virtual_pet.Core.Entities.Items;
+﻿using virtual_pet.Core.Entities.Items;
+using virtual_pet.Core.Level.Common;
 using virtual_pet.Core.Manager;
 using virtual_pet.Core.Models;
 

@@ -19,7 +19,7 @@
     <None Remove="Core\Entities\" />
     <None Remove="Core\Manager\" />
     <None Remove="Application\" />
-    <None Remove="Core\Entities\Pets\" />
+    <None Remove="Core\Entity\Pets\" />
     <None Remove="Core\Levels\" />
   </ItemGroup>
   <ItemGroup>
