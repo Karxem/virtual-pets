@@ -1,4 +1,6 @@
-﻿internal class EventGenerator
+﻿using virtual_pet.Core.Level.Enums;
+
+internal class EventGenerator
 {
     private static readonly Random random = new Random();
 
@@ -8,8 +10,7 @@
 
         if (events == null || events.Length == 0)
         {
-            Console.WriteLine("No events available.");
-            return LevelEvent.DefaultEvent;
+            Environment.Exit(0);
         }
 
         LevelEvent randomEvent = (LevelEvent)events.GetValue(random.Next(events.Length));
