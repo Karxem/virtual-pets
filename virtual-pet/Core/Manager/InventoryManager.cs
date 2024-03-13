@@ -21,7 +21,7 @@ namespace virtual_pet.Core.Manager
 
         public void SaveItem(ItemBase item)
         {
-            var existingItem = items.Find(p => p.Name == item.Name);
+            var existingItem = items.FirstOrDefault(p => p.Name == item.Name && p.Description == item.Description);
 
             if (existingItem == null)
             {
@@ -29,7 +29,7 @@ namespace virtual_pet.Core.Manager
             }
             else
             {
-                existingItem.AddItem(item.Count);
+                existingItem.Count += item.Count;
             }
 
             SaveItemsToFile();
