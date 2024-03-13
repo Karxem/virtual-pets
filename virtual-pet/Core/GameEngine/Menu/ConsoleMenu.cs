@@ -174,9 +174,10 @@ namespace virtual_pet.Core.GameEngine.Menu
                     MoveSelectionRight();
                     return;
                 case ACTION_CLOSE:
-                    GameEngine.CloseMenu();
+                    Engine.CloseMenu();
                     return;
                 default:
+                    ItemClick(id);
                     return;
             }
         }
@@ -196,12 +197,12 @@ namespace virtual_pet.Core.GameEngine.Menu
             }
             if (item is TextInputItem)
             {
-                GameEngine.PassInput((item as TextInputItem).Input);
+                Engine.PassInput((item as TextInputItem).Input);
                 return;
             }
             if (item is SubMenuItem)
             {
-                GameEngine.OpenMenu((item as SubMenuItem).Menu);
+                Engine.OpenMenu((item as SubMenuItem).Menu);
                 return;
             }
         }
@@ -262,10 +263,12 @@ namespace virtual_pet.Core.GameEngine.Menu
         {
             return CreateTextInputItem(text, delegate { onItemSelected?.Invoke(this, menuItems.Count); }, allowWhitespace);
         }
+
         public TextInputItem CreateNumberInputItem(string text)
         {
             return CreateNumberInputItem(text, delegate { onItemSelected?.Invoke(this, menuItems.Count); });
         }
+
         public TextInputItem CreateRegexTextInputItem(string text, string regex)
         {
             return CreateRegexTextInputItem(text, regex, delegate { onItemSelected?.Invoke(this, menuItems.Count); });
@@ -278,6 +281,7 @@ namespace virtual_pet.Core.GameEngine.Menu
             menuItems.Add(item);
             return item;
         }
+
         public TextInputItem CreateNumberInputItem(string text, TextInput.OnSubmit onSubmit)
         {
             TextInput input = TextInput.GetNumberInput(onSubmit);
@@ -292,7 +296,6 @@ namespace virtual_pet.Core.GameEngine.Menu
             menuItems.Add(item);
             return item;
         }
-
         private void MoveSelectionUp()
         {
             selectedItemIndex = (selectedItemIndex - 1 + menuItems.Count) % menuItems.Count;
@@ -309,6 +312,7 @@ namespace virtual_pet.Core.GameEngine.Menu
         {
 
         }
+
         private void MoveSelectionRight()
         {
 
