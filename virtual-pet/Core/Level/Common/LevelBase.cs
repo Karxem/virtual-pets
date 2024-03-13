@@ -29,14 +29,23 @@ namespace virtual_pet.Core.Level.Common
         {
             //LevelEvent e = EventGenerator.GenerateRandomEvent();
             //Renderer.PlayBuffer.WriteLine(e.ToString());
+
             HandleEvent(LevelEvent.ShopVisit);//e);
         }
 
-        public virtual void Display(GameEngine.Render.Buffer buffer)
+        private void HandleEvent(LevelEvent e)
         {
-            if (IsShopOpen)
+            switch (e)
             {
-                OpenedShop.Display(buffer);
+                case LevelEvent.WildPetAttack:
+                    StartFight();
+                    break;
+                case LevelEvent.ShopVisit:
+                    VisitShop();
+                    break;
+                default:
+                    Renderer.PlayBuffer.WriteLine("Invalid LevelEvent was passed.");
+                    break;
             }
         }
 
@@ -61,19 +70,11 @@ namespace virtual_pet.Core.Level.Common
             Engine.PopInput();
         }
 
-        private void HandleEvent(LevelEvent e)
+        public virtual void Display(GameEngine.Render.Buffer buffer)
         {
-            switch (e)
+            if (IsShopOpen)
             {
-                case LevelEvent.WildPetAttack:
-                    StartFight();
-                    break;
-                case LevelEvent.ShopVisit:
-                    VisitShop();
-                    break;
-                default:
-                    Renderer.PlayBuffer.WriteLine("Invalid LevelEvent was passed.");
-                    break;
+                OpenedShop.Display(buffer);
             }
         }
 
