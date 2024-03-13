@@ -1,11 +1,13 @@
 ﻿using virtual_pet.Core.Level.Common;
 using virtual_pet.Core.Entity.Common;
 using virtual_pet.Core.GameEngine.Menu;
+using virtual_pet.Core.Manager;
 
 namespace virtual_pet.Core.Model
 {
     public class Shop : ConsoleMenu
     {
+        private static readonly InventoryManager inventoryManager = new InventoryManager();
         private List<ItemBase> availableItems;
         private LevelBase owner;
 
@@ -21,6 +23,10 @@ namespace virtual_pet.Core.Model
                 CreateClickItem(items[i].Name + " [" + items[i].Count + "]", onItemSelection);
             }
         }
+        public Shop CreateShop()
+        {
+            return new Shop(owner, availableItems);
+        }
 
         private void menuHandler(object sender, int id)
         {
@@ -29,18 +35,27 @@ namespace virtual_pet.Core.Model
                 owner.CloseShop();
                 return;
             }
+
             DefaultItemSelected(id);
         }
 
         private void onItemSelection(object sender, string text)
         {
             ClickItem item = (ClickItem)sender;
-            SellItem(availableItems[item.Id]);
             item.Text = availableItems[item.Id].Name + " [" + availableItems[item.Id].Count + "]";
+            
+            Purchase(availableItems[item.Id]);
         }
 
-        public void SellItem(ItemBase item)
+        private void Purchase(ItemBase item)
         {
+            if (item == null)
+            {
+                return;
+            }
+
+            Console.WriteLine("Purchased " + item.Name + " x" + item.Count);
+            inventoryManager.SaveItem(item);
         }
     }
 }

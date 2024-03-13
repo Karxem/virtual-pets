@@ -14,8 +14,8 @@ namespace virtual_pet.Core.Manager
         public InventoryManager()
         {
             filePath = LoadFilePath();
-
             items = new List<ItemBase>();
+
             LoadItems();
         }
 
@@ -29,7 +29,7 @@ namespace virtual_pet.Core.Manager
             }
             else
             {
-                existingItem.AddItem(1);
+                existingItem.AddItem(item.Count);
             }
 
             SaveItemsToFile();
