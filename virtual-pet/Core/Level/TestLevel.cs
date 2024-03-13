@@ -31,9 +31,9 @@ namespace virtual_pet.Core.Level
 
             List<ItemBase> shopItems = new List<ItemBase>();
             shopItems.Add(new HealingPotion(10) { Count = 1 });
-            shopItems.Add(new HealingPotion(50) { Count = 1 });
-            shopItems.Add(new HealingPotion(80) { Count = 1 });
-            shop = new ShopManager().CreateShop(this, shopItems);
+            shopItems.Add(new HealingPotion(50) { Count = 2 });
+            shopItems.Add(new HealingPotion(80) { Count = 3 });
+            shop = new Shop(this, shopItems).CreateShop();
 
             OpenShop(shop);
         }
