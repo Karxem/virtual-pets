@@ -138,7 +138,6 @@ namespace virtual_pet.Core.Manager
             }
         }
 
-
         private void SavePetsToFile()
         {
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, this.filePath);
@@ -158,12 +157,10 @@ namespace virtual_pet.Core.Manager
                 }
                 catch (IOException e) when (i <= NumberOfRetries)
                 {
-                    Console.WriteLine(e.Message);
                     Thread.Sleep(DelayOnRetry);
                 }
             }
         }
-
 
         private void SetGameTickTimer()
         {

@@ -2,12 +2,12 @@
 using virtual_pet.Core.Entity.Common;
 using virtual_pet.Core.Model;
 using virtual_pet.Core.Entity.Items;
+using virtual_pet.Core.GameEngine.Render;
 
 namespace virtual_pet.Core.Level
 {
     internal class TestLevel : LevelBase
     {
-        private static readonly ShopManager shopManager = new ShopManager();
         private Shop shop;
 
         public override string Name => "Test Level";
@@ -16,7 +16,7 @@ namespace virtual_pet.Core.Level
 
         public override void StartFight()
         {
-            Renderer.MainBuffer.WriteLine("Fight!");
+            Console.WriteLine("Fight!");
         }
 
         public override void Display(GameEngine.Render.Buffer buffer)

@@ -50,7 +50,6 @@ namespace virtual_pet.Application
             Console.WriteLine("Exiting...");
         }
 
-
         public static void onItemSelected(object sender, int selectedIndex)
         {
             switch (selectedIndex)
@@ -94,7 +93,7 @@ namespace virtual_pet.Application
             }
 
             Renderer.MainBuffer.WriteLine("\nPress Enter to go back to the main menu...");
-            //Console.ReadLine(); // Stop it, get some help
+            Console.ReadLine(); // Stop it, get some help
         }
 
         private static void ShowPetOverview(List<PetBase> pets)
