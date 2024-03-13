@@ -5,14 +5,11 @@ namespace virtual_pet.Core.GameEngine.Menu
 {
     public class DebugMenu
     {
-
         public ConsoleMenu Menu { get; private set; }
         public ClickItem ToggleDebugPrint { get; private set; }
         public TextInputItem DebugTextInput { get; private set; }
 
         static DebugPrint debugPrint = new DebugPrint();
-
-
 
         public DebugMenu()
         {
@@ -27,20 +24,19 @@ namespace virtual_pet.Core.GameEngine.Menu
 
         }
 
-
         private void onDebugPrint(object sender, string text)
         {
-            if (GameEngine.ContainsDisplayable(debugPrint))
+            if (Engine.ContainsDisplayable(debugPrint))
             {
-                GameEngine.RemoveDisplayable(debugPrint);
+                Engine.RemoveDisplayable(debugPrint);
                 return;
             }
-            GameEngine.CloseMenu();
+            Engine.CloseMenu();
         }
 
         private void onDebugTextInput(object sender, string text)
         {
-            GameEngine.PopInput();
+            Engine.PopInput();
         }
     }
 }
