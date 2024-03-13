@@ -6,14 +6,14 @@ namespace virtual_pet.Core.Entity.Items
     internal class HealingPotion : ItemBase
     {
         private static readonly PetManager petManager = new PetManager();
-        public int HealingAmount { get; private set; }
 
         public override string Name => "Healing Potion";
 
-        public override string Description => "Heals half of the HP points of a pet.";
+        public int HealingAmount { get; private set; }
 
         public HealingPotion(int healingAmount)
         {
+            Description = "A potion that heals your pet for a certain amount of health points.";
             HealingAmount = healingAmount;
         }
 

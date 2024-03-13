@@ -183,7 +183,6 @@ namespace virtual_pet.Core.Manager
                 {
                     petInstance.GameTick();
 
-                    // This leads to a crash once you load the pet.json in your local environment
                     SavePet(petInstance);
                 }
             }
