@@ -79,12 +79,9 @@ namespace virtual_pet.Core.Manager
             switch (choice)
             {
                 case 1:
-                    int damageDealt = CalculateDamage(playerPet, enemyPet);
-                    enemyPet.TakeDamage(damageDealt);
-
                     Console.Clear();
+
                     playerPet.UseAbility();
-                    Console.WriteLine($"\n{playerPet.Name} dealt {damageDealt} damage to {enemyPet.Name}!");
                     break;
                 case 2:
                     Console.Clear();

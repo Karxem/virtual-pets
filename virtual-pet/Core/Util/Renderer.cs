@@ -4,8 +4,10 @@
     {
         private const int HeaderHeight = 6;
         private const int DisplayHeight = 20;
-        private const int MenuHeight = 10;
+        private const int MenuHeight = 9;
         private const int TotalHeight = HeaderHeight + DisplayHeight + MenuHeight;
+
+        private static string[] inputBuffer = new string[DisplayHeight];
 
         public static void Initialize()
         {
@@ -16,16 +18,17 @@
         {
             Console.CursorVisible = false;
             Console.Clear();
-            Console.SetWindowSize(80, TotalHeight);
+            Console.SetWindowSize(80, TotalHeight + 1);
 
             RenderHeader();
-            RenderDisplayArea();
+            RenderDisplay();
             RenderMenu();
         }
 
         private static void RenderHeader()
         {
             Console.SetCursorPosition(0, 0);
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine(
 @"···········································································
 :  ___ ___ __        __                __      ______         __          :
@@ -36,29 +39,47 @@
             );
         }
 
-        private static void RenderDisplayArea()
+        private static void RenderDisplay()
         {
-            Console.SetCursorPosition(0, HeaderHeight);
+            // Initial Display Content
         }
 
         private static void RenderMenu()
         {
-            Console.SetCursorPosition(0, HeaderHeight + DisplayHeight);
+            Console.SetCursorPosition(0, TotalHeight - 1);
+            Console.WriteLine("···········································································");
         }
 
         public static void RenderDisplayContent(string[] lines)
         {
-            Console.SetCursorPosition(0, HeaderHeight + 1); 
+            Console.SetCursorPosition(0, HeaderHeight + 1);
 
-            if(lines == null || lines.Length > 10)
+            if (lines == null || lines.Length > DisplayHeight)
             {
                 return;
             }
 
-            foreach (string line in lines)
+            int currentLine = 0;
+            for (int i = 0; i < lines.Length; i++)
             {
-                Console.WriteLine(line);
+                if (currentLine == DisplayHeight - 1) // Last line is reserved for input
+                    break;
+
+                Console.SetCursorPosition(0, HeaderHeight + 1 + currentLine);
+                Console.WriteLine(lines[i]);
+                currentLine++;
             }
+        }
+
+        public static void SetDisplayContent(string content, int lineIndex)
+        {
+            if (lineIndex < 0 || lineIndex >= DisplayHeight)
+            {
+                return; // Invalid line index
+            }
+
+            Console.SetCursorPosition(0, HeaderHeight + 1 + lineIndex);
+            Console.WriteLine(content);
         }
 
         public static int RenderMenuContent(List<string> menuItems, Action<int> callback)
@@ -87,9 +108,25 @@
                         break;
                 }
 
-            } while (key.Key != ConsoleKey.Escape); // You can modify the exit condition if needed
+            } while (key.Key != ConsoleKey.Escape);
 
             return selectedItemIndex;
+        }
+
+        public static void SetInputLine(string prompt)
+        {
+            int cursor = HeaderHeight + DisplayHeight - 2;
+            Console.SetCursorPosition(0, cursor);
+            Console.Write(prompt);
+
+            inputBuffer[DisplayHeight - 1] = Console.ReadLine();
+            Console.SetCursorPosition(0, cursor);
+            Console.Write(new string(' ', Console.WindowWidth));
+        }
+
+        public static string GetInputLine()
+        {
+            return inputBuffer[DisplayHeight - 1];
         }
 
         public static void ClearSection(string section)

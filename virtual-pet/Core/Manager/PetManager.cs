@@ -85,15 +85,15 @@ namespace virtual_pet.Core.Manager
 
             PetBase pet = (PetBase)Activator.CreateInstance(type);
 
-            if (pet != null)
+            if (pet == null)
             {
-                pet.Name = name;
-                pet.Type = petType;
-                pet.InitPetBaseStats();
-                return pet;
+                throw new InvalidOperationException("Failed to create a new pet instance");
             }
-
-            throw new InvalidOperationException("Failed to create a new pet instance");
+            
+            pet.Name = name;
+            pet.Type = petType;
+            pet.InitPetBaseStats();
+            return pet; 
         }
 
         public List<string> GetPetTypes()

@@ -1,4 +1,5 @@
-﻿using virtual_pet.Core.Manager;
+﻿using System.Text;
+using virtual_pet.Core.Manager;
 using virtual_pet.Core.Model;
 
 namespace virtual_pet.Core.Entity.Common
@@ -73,9 +74,13 @@ namespace virtual_pet.Core.Entity.Common
 
         public string ShowPetOverview()
         {
-            return $"< Name: {Name ?? "Unknown"}, Type: {GetPetType() ?? "Unknown"}, Level: {Level?.Value ?? 1}\n" +
-                   $"< Energy: {Energy?.Value ?? 0}, Attack: {Attack?.Value ?? 0}, Defense: {Defense?.Value ?? 0}\n" +
-                   $"< Health: {Health?.Value ?? 0}, Hunger: {Hunger?.Value ?? 0}, Thirst: {Thirst?.Value ?? 0}\n";
+            StringBuilder overviewBuilder = new StringBuilder();
+
+            overviewBuilder.AppendLine($"< Name: {Name}, Type: {GetPetType()}, Level: {Level.Value}");
+            overviewBuilder.AppendLine($"< Energy: {Energy.Value}, Attack: {Attack.Value}, Defense: {Defense.Value}");
+            overviewBuilder.Append($"< Health: {Health.Value}, Hunger: {Hunger.Value}, Thirst: {Thirst.Value}");
+
+            return overviewBuilder.ToString();
         }
 
         private void CheckLevelUp()
