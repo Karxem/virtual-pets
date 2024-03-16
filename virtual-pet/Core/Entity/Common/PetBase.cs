@@ -71,6 +71,13 @@ namespace virtual_pet.Core.Entity.Common
             Experience.Value -= random.Next(0, 5);
         }
 
+        public string ShowPetOverview()
+        {
+            return $"< Name: {Name ?? "Unknown"}, Type: {GetPetType() ?? "Unknown"}, Level: {Level?.Value ?? 1}\n" +
+                   $"< Energy: {Energy?.Value ?? 0}, Attack: {Attack?.Value ?? 0}, Defense: {Defense?.Value ?? 0}\n" +
+                   $"< Health: {Health?.Value ?? 0}, Hunger: {Hunger?.Value ?? 0}, Thirst: {Thirst?.Value ?? 0}\n";
+        }
+
         private void CheckLevelUp()
         {
             double lvlUpThreshold = Level.Value * 100;
