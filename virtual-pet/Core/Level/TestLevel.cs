@@ -2,7 +2,6 @@
 using virtual_pet.Core.Entity.Common;
 using virtual_pet.Core.Model;
 using virtual_pet.Core.Entity.Items;
-using virtual_pet.Core.GameEngine.Render;
 using virtual_pet.Core.Manager;
 
 namespace virtual_pet.Core.Level
@@ -17,12 +16,6 @@ namespace virtual_pet.Core.Level
         public override bool HasCity => false;
         public override bool HasShop => true;
 
-        public override void Display(GameEngine.Render.Buffer buffer)
-        {
-            buffer.WriteLine("Shopping time!");
-            base.Display(buffer);
-        }
-
         public override void StartFight()
         {
             combatManager.HandleFight(petManager.GetPets());
@@ -30,7 +23,7 @@ namespace virtual_pet.Core.Level
 
         public override void VisitShop()
         {
-            Renderer.PlayBuffer.WriteLine("Shopping time!");
+            Console.WriteLine("Shopping time!");
 
             List<ItemBase> shopItems = new List<ItemBase>();
             shopItems.Add(new HealingPotion(10) { Count = 1, Description = "Heals 10 HP" });

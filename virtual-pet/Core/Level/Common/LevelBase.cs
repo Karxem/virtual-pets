@@ -1,13 +1,11 @@
 ﻿using virtual_pet.Core.Manager;
 using virtual_pet.Core.Model;
 using virtual_pet.Core.Entity.Common;
-using virtual_pet.Core.GameEngine.Render;
-using virtual_pet.Core.GameEngine.Common;
 using virtual_pet.Core.Level.Enums;
 
 namespace virtual_pet.Core.Level.Common
 {
-    public abstract class LevelBase : IDisplayable
+    public abstract class LevelBase
     {
         private static readonly PetManager petManager = new PetManager();
         private static readonly CombatManager combatManager = new CombatManager();
@@ -44,7 +42,7 @@ namespace virtual_pet.Core.Level.Common
                     VisitShop();
                     break;
                 default:
-                    Renderer.PlayBuffer.WriteLine("Invalid LevelEvent was passed.");
+                    Console.WriteLine("Invalid LevelEvent was passed.");
                     break;
             }
         }
@@ -58,7 +56,6 @@ namespace virtual_pet.Core.Level.Common
 
             OpenedShop = s;
             IsShopOpen = true;
-            Engine.PassInput(s);
         }
 
         public void CloseShop()
@@ -67,15 +64,6 @@ namespace virtual_pet.Core.Level.Common
                 return;
             OpenedShop = null;
             IsShopOpen = false;
-            Engine.PopInput();
-        }
-
-        public virtual void Display(GameEngine.Render.Buffer buffer)
-        {
-            if (IsShopOpen)
-            {
-                OpenedShop.Display(buffer);
-            }
         }
 
         public abstract void StartFight();
