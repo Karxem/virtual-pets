@@ -25,7 +25,6 @@ namespace virtual_pet.Application
             "Exit"
         };
 
-        static ConsoleMenu consoleMenu = new ConsoleMenu(onItemSelected, menuItems);
         static List<PetBase> pets = new List<PetBase>();
         static List<ItemBase> items = new List<ItemBase>();
 
@@ -50,7 +49,7 @@ namespace virtual_pet.Application
             Console.WriteLine("Exiting...");
         }
 
-        public static void onItemSelected(object sender, int selectedIndex)
+        public static void onItemSelected(int selectedIndex)
         {
             switch (selectedIndex)
             {
@@ -76,7 +75,7 @@ namespace virtual_pet.Application
                     break;
                 case 5:
                     LevelBase level = new TestLevel();
-                    Engine.setCurrentLevel(level);
+                    // Engine.setCurrentLevel(level);
                     level.StartLevel();
                     break;
                 case 6:
@@ -92,7 +91,7 @@ namespace virtual_pet.Application
                     break;
             }
 
-            Renderer.MainBuffer.WriteLine("\nPress Enter to go back to the main menu...");
+            Console.WriteLine("\nPress Enter to go back to the main menu...");
             Console.ReadLine(); // Stop it, get some help
         }
 
