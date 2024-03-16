@@ -2,10 +2,10 @@
 using virtual_pet.Core.Level.Common;
 using virtual_pet.Core.Level;
 using virtual_pet.Core.Entity.Common;
-using virtual_pet.Core.GameEngine.Common;
-using virtual_pet.Core.GameEngine.Menu;
-using virtual_pet.Core.GameEngine.Render;
 using virtual_pet.Core.Entity.Items;
+using virtual_pet.Core.Util;
+using System.Reflection.Emit;
+using System.Xml.Linq;
 
 namespace virtual_pet.Application
 {
@@ -30,27 +30,20 @@ namespace virtual_pet.Application
 
         static void Main()
         {
-            Engine.Init();
-            Renderer.Init();
             pets = petManager.GetPets();
             items = inventoryManager.GetItems();
 
-            Console.CursorVisible = false;
-            Engine.OpenMenu(consoleMenu);
-
-            while (Engine.IsRunning)
-            {
-                Renderer.ClearBuffers();
-                Engine.Tick();
-                Renderer.Render();
-                Thread.Sleep(16);
-            }
-
-            Console.WriteLine("Exiting...");
+            Renderer.Initialize();
+            Renderer.RenderMenuContent(menuItems, onItemSelected);
         }
 
         public static void onItemSelected(int selectedIndex)
         {
+            if (selectedIndex == -1)
+            {
+                return;
+            }
+
             switch (selectedIndex)
             {
                 case 0:
@@ -90,28 +83,17 @@ namespace virtual_pet.Application
                     Console.WriteLine("An error occurred");
                     break;
             }
-
-            Console.WriteLine("\nPress Enter to go back to the main menu...");
-            Console.ReadLine(); // Stop it, get some help
         }
 
         private static void ShowPetOverview(List<PetBase> pets)
         {
-            Console.Clear();
-            Console.WriteLine(SendHeaderText(pets.Count));
-            Console.WriteLine("-------------------------------------------------------");
-
-            foreach (var pet in pets)
-            {
-                if (pet == null)
-                {
-                    continue;
-                }
-
-                Console.WriteLine($"< Name: {pet.Name ?? "Unknown"}, Type: {pet.GetPetType() ?? "Unknown"}, Level: {pet.Level?.Value ?? 0}");
-                Console.WriteLine($"< Energy: {pet.Energy?.Value ?? 0}, Attack: {pet.Attack?.Value ?? 0}, Defense: {pet.Defense?.Value ?? 0}");
-                Console.WriteLine($"< Health: {pet.Health?.Value ?? 0}, Hunger: {pet.Hunger?.Value ?? 0}, Thirst: {pet.Thirst?.Value ?? 0}\n");
+            Renderer.ClearSection("display");
+            List<string> list = new List<string>();
+            foreach (var pet in pets) {
+                list.Add(pet.ShowPetOverview());
             }
+
+            Renderer.RenderDisplayContent(list.ToArray());
         }
 
 
