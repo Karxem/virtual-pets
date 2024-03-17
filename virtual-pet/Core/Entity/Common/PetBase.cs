@@ -75,7 +75,7 @@ namespace virtual_pet.Core.Entity.Common
         public string ShowPetOverview()
         {
             StringBuilder overviewBuilder = new StringBuilder();
-
+            overviewBuilder.AppendLine(GetPetSprite() + "\n");
             overviewBuilder.AppendLine($"< Name: {Name}, Type: {GetPetType()}, Level: {Level.Value}");
             overviewBuilder.AppendLine($"< Energy: {Energy.Value}, Attack: {Attack.Value}, Defense: {Defense.Value}");
             overviewBuilder.Append($"< Health: {Health.Value}, Hunger: {Hunger.Value}, Thirst: {Thirst.Value}");
@@ -102,6 +102,7 @@ namespace virtual_pet.Core.Entity.Common
         }
 
         public abstract string GetPetType();
+        public abstract string GetPetSprite();
         public abstract void UseAbility();
     }
 }
