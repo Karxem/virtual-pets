@@ -1,5 +1,6 @@
 ﻿using virtual_pet.Core.Entity.Common;
 using virtual_pet.Core.Manager;
+using virtual_pet.Core.Util;
 
 namespace virtual_pet.Core.Entity.Items
 {
@@ -22,8 +23,7 @@ namespace virtual_pet.Core.Entity.Items
             ApplyEffect(targetPet);
             RemoveItem(1);
 
-            Console.Clear();
-            Console.WriteLine($"{targetPet.Name} used {Name} and healed for {HealingAmount} health points.\n");
+            Renderer.SendNotification($"{targetPet.Name} used {Name} and healed for {HealingAmount} health points.");
         }
 
         public override void DisplayItemInfo()
@@ -36,7 +36,6 @@ namespace virtual_pet.Core.Entity.Items
         public override void ApplyEffect(PetBase targetPet)
         {
             targetPet.Heal(HealingAmount);
-            petManager.SavePet(targetPet);
         }
     }
 }

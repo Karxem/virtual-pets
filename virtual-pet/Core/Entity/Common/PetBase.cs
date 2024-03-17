@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using virtual_pet.Core.Manager;
 using virtual_pet.Core.Model;
+using virtual_pet.Core.Util;
 
 namespace virtual_pet.Core.Entity.Common
 {
@@ -57,7 +58,7 @@ namespace virtual_pet.Core.Entity.Common
         {
             var amount = random.Next(2, 10);
             Experience.Value += amount;
-            Console.WriteLine($"{Name} gained {amount} experience.");
+            Renderer.SendNotification($"{Name} gained {amount} experience.");
 
             CheckLevelUp();
         }
