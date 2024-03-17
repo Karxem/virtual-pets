@@ -7,16 +7,17 @@ namespace virtual_pet.Core.Manager
     {
         private static readonly PetManager petManager = new PetManager();
         private static readonly InventoryManager inventoryManager = new InventoryManager();
-        private static GameState currentGamestate = new GameState();
         private Stack<GameState> menuHistory = new Stack<GameState>();
+        private GameState currentGameState;
 
-        private static List<PetBase> pets = new List<PetBase>();
-        private static List<ItemBase> items = new List<ItemBase>();
+        private List<PetBase> pets = new List<PetBase>();
+        private List<ItemBase> items = new List<ItemBase>();
 
-        public void Initialize()
+        public StateManager()
         {
-            currentGamestate = GameState.MainMenu;
+            currentGameState = GameState.MainMenu;
             menuHistory.Push(currentGameState);
+
             pets = petManager.GetPets();
             items = inventoryManager.GetItems();
 
@@ -35,13 +36,9 @@ namespace virtual_pet.Core.Manager
                 return;
             }
 
-        }
             menuHistory.Pop();
             currentGameState = menuHistory.Peek(); 
 
-        public static GameState GetGamestate()
-        {
-            return currentGamestate;
             switch (currentGameState)
             {
                 case GameState.MainMenu:
@@ -53,7 +50,7 @@ namespace virtual_pet.Core.Manager
             }
         }
 
-        private static void SetMainMenu()
+        private void SetMainMenu()
         {
             List<string> menuItems = new List<string>
             {
@@ -61,11 +58,14 @@ namespace virtual_pet.Core.Manager
                 "Exit"
             };
 
+            SetMainMenuDisplay();
             Renderer.RenderMenuContent(menuItems, onItemSelected);
         }
 
-        private static void onItemSelected(int selectedIndex)
+        private void onItemSelected(int selectedIndex)
         {
+            Renderer.ClearSection("menu");
+
             if (selectedIndex == -1)
             {
                 return;
@@ -82,19 +82,14 @@ namespace virtual_pet.Core.Manager
             }
         }
 
-        private static void UpdateGamestate(GameState gamestate)
+        private void UpdateGamestate(GameState gamestate)
         {
             if (gamestate == GameState.MainMenu)
             {
-                if (currentGamestate == GameState.Ingame)
-                {
-                    return;
-                }
-
-                SetMainMenu();
+                return;
             }
 
-            currentGamestate = gamestate;
+            currentGameState = gamestate;
             menuHistory.Push(gamestate);
 
             switch (gamestate)
@@ -102,30 +97,127 @@ namespace virtual_pet.Core.Manager
                 case GameState.Overview:
                     ShowPetOverview(pets);
                     break;
-                case GameState.Ingame:
-                    break;
                 case GameState.Exit:
                     break;
             }
         }
 
-        private static void ShowPetOverview(List<PetBase> pets)
+        private void ShowPetOverview(List<PetBase> pets)
         {
+            SetOverviewDisplay();
             List<string> menuItems = new List<string>();
             foreach (var pet in pets)
             {
                 menuItems.Add($"{pet.Name}");
             }
 
+            PetBase selectedPet = null;
             Renderer.RenderMenuContent(menuItems, (i) =>
             {
                 Renderer.ClearSection("display");
+                selectedPet = pets[i];
+                Renderer.SetDisplayContent(selectedPet.ShowPetOverview(), 0);
+
+                currentGameState = GameState.PetOverview;
                 menuHistory.Push(currentGameState);
 
-                PetBase pet = pets[i];
-                Renderer.SetDisplayContent(pet.ShowPetOverview(), 0);
+                List<string> options = new List<string>
+                {
+                    "Feed",
+                    "Play",
+                    "Use Item",
+                };
+
+                Renderer.ClearSection("menu");
+                Renderer.RenderMenuContent(options, (i) =>
+                {
+                    if (selectedPet == null)
+                    {
+                        return;
+                    }
+
+                    switch (i)
+                    {
+                        case 0:
+                            selectedPet.Eat(20);
+                            selectedPet.Drink(20);
+                            selectedPet.Sleep(20);
+
+                            Renderer.ClearSection("display");
+                            Renderer.SendNotification($"You have fed {selectedPet.Name}!");
+                            break;
+                        case 1:
+                            Renderer.ClearSection("display");
+                            selectedPet.GainExperience();
+                            break;
+                        case 2:
+                            List<string> inventory = new List<string>();
+                            foreach (var item in items)
+                            {
+                                inventory.Add($"{item.Name}");
+                            }
+
+                            Renderer.RenderMenuContent(inventory, (i) =>
+                            {
+                                ItemBase selectedItem = items[i];
                                 menuHistory.Push(currentGameState);
+
+                                Renderer.ClearSection("display");
+                                selectedItem.UseItem(selectedPet);
+                                petManager.SavePet(selectedPet);
+                                Renderer.SetDisplayContent(selectedPet.ShowPetOverview(), 1);
+                            });
+                            break;
+                    }
+                    Renderer.SetDisplayContent(selectedPet.ShowPetOverview(), 1);
+                });
             });
+        }
+
+        public void SetMainMenuDisplay()
+        {
+            Renderer.ClearSection("display");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Renderer.SetDisplayContent(
+@"      ////^\\\\
+      | ^   ^ |
+     @ (o) (o) @       ==========================
+      |   <   |        |   Hey you!             |
+      |  ___  |        |   How are your pets?   |
+       \_____/         ==========================
+     ____|  |____
+    /    \__/    \
+   /              \
+  /\_/|        |\_/\
+ / /  |        |  \ \
+( <   |        |   > )
+ \ \  |        |  / /
+  \ \ |________| / /
+   \ \|        |/ /", 1);
+            Console.ResetColor();
+        }
+
+        public void SetOverviewDisplay()
+        {
+            Renderer.ClearSection("display");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Renderer.SetDisplayContent(
+@"      ////^\\\\
+      | ^   ^ |
+     @ (o) (o) @       ==============================================
+      |   <   |        |   Which pet do you want to take care of?   |
+      |  ___  |        ==============================================
+       \_____/
+     ____|  |____
+    /    \__/    \
+   /              \
+  /\_/|        |\_/\
+ / /  |        |  \ \
+( <   |        |   > )
+ \ \  |        |  / /
+  \ \ |________| / /
+   \ \|        |/ /", 1);
+            Console.ResetColor();
         }
     }
 }
