@@ -3,6 +3,7 @@
     MainMenu,
     Overview,
     PetOverview,
+    Train,
     Ingame,
     Exit
 }
