@@ -81,6 +81,15 @@
             Console.WriteLine(content);
         }
 
+        public static void SendNotification(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(0, HeaderHeight);
+            Console.WriteLine(message);
+
+            Console.ResetColor();
+        }
+
         public static int RenderMenuContent(List<string> menuItems, Action<int> callback)
         {
             int selectedItemIndex = 0;
