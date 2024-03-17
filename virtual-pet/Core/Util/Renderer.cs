@@ -141,6 +141,32 @@ namespace virtual_pet.Core.Util
             return inputBuffer[DisplayHeight - 1];
         }
 
+        public static void RenderProgressBar(int lineIndex, int interval)
+        {
+            if (lineIndex < 0 || lineIndex >= DisplayHeight)
+            {
+                return; // Invalid line index
+            }
+
+            int totalSteps = 50;
+
+            int millisecondsPerStep = interval / totalSteps*2;
+
+            for (int i = 0; i <= totalSteps; i++)
+            {
+                double percent = (double)i / totalSteps;
+
+                Console.SetCursorPosition(0, HeaderHeight + 1 + lineIndex);
+                Console.Write("[");
+                Console.Write(new string('#', (int)(percent * totalSteps)));
+                Console.Write(new string(' ', totalSteps - (int)(percent * totalSteps)));
+                Console.Write("] ");
+                Console.Write((percent * 100).ToString("0.00") + "%\r");
+
+                Thread.Sleep(millisecondsPerStep);
+            }
+        }
+
         public static void ClearSection(string section)
         {
             switch (section)
