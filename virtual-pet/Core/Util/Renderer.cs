@@ -28,7 +28,7 @@
         private static void RenderHeader()
         {
             Console.SetCursorPosition(0, 0);
-            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine(
 @"···········································································
 :  ___ ___ __        __                __      ______         __          :
@@ -46,8 +46,7 @@
 
         private static void RenderMenu()
         {
-            Console.SetCursorPosition(0, TotalHeight - 1);
-            Console.WriteLine("···········································································");
+            // Initial Menu Content
         }
 
         public static void RenderDisplayContent(string[] lines)
@@ -62,7 +61,7 @@
             int currentLine = 0;
             for (int i = 0; i < lines.Length; i++)
             {
-                if (currentLine == DisplayHeight - 1) // Last line is reserved for input
+                if (currentLine == DisplayHeight - 1) // Last line is reserved for inputs
                     break;
 
                 Console.SetCursorPosition(0, HeaderHeight + 1 + currentLine);
@@ -108,8 +107,10 @@
                         break;
                 }
 
-            } while (key.Key != ConsoleKey.Escape);
+            } while (key.Key != ConsoleKey.Backspace);
 
+            ClearSection("menu");
+            ClearSection("display");
             return selectedItemIndex;
         }
 
@@ -142,7 +143,7 @@
                     }
                     break;
                 case "menu":
-                    Console.SetCursorPosition(0, DisplayHeight);
+                    Console.SetCursorPosition(0, HeaderHeight + DisplayHeight);
 
                     for (int i = 0; i < MenuHeight; i++)
                     {
