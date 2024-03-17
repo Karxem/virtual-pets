@@ -1,4 +1,5 @@
-﻿using virtual_pet.Core.Entity.Common;
+﻿using System.Text;
+using virtual_pet.Core.Entity.Common;
 using virtual_pet.Core.Util;
 
 namespace virtual_pet.Core.Manager
@@ -30,14 +31,14 @@ namespace virtual_pet.Core.Manager
         public void GoBack()
         {
             Renderer.ClearSection("display");
-            
-            if (menuHistory.Count < 1)
+
+            if (menuHistory.Count <= 1)
             {
                 return;
             }
 
             menuHistory.Pop();
-            currentGameState = menuHistory.Peek(); 
+            currentGameState = menuHistory.Peek();
 
             switch (currentGameState)
             {
@@ -47,6 +48,9 @@ namespace virtual_pet.Core.Manager
                 case GameState.Overview:
                     SetOverviewDisplay();
                     break;
+                case GameState.Train:
+                    SetMainMenuDisplay();
+                    break;
             }
         }
 
@@ -55,6 +59,7 @@ namespace virtual_pet.Core.Manager
             List<string> menuItems = new List<string>
             {
                 "Pet Overview",
+                "Train pet",
                 "Exit"
             };
 
@@ -77,6 +82,9 @@ namespace virtual_pet.Core.Manager
                     UpdateGamestate(GameState.Overview);
                     break;
                 case 1:
+                    UpdateGamestate(GameState.Train);
+                    break;
+                case 2:
                     Environment.Exit(0);
                     return;
             }
@@ -84,7 +92,7 @@ namespace virtual_pet.Core.Manager
 
         private void UpdateGamestate(GameState gamestate)
         {
-            if (gamestate == GameState.MainMenu)
+            if (gamestate == GameState.MainMenu || menuHistory.Pop() == GameState.Ingame)
             {
                 return;
             }
@@ -96,6 +104,9 @@ namespace virtual_pet.Core.Manager
             {
                 case GameState.Overview:
                     ShowPetOverview(pets);
+                    break;
+                case GameState.Train:
+                    TrainPets(pets);
                     break;
                 case GameState.Exit:
                     break;
@@ -174,7 +185,34 @@ namespace virtual_pet.Core.Manager
             });
         }
 
-        public void SetMainMenuDisplay()
+        private void TrainPets(List<PetBase> pets)
+        {
+            SetTrainingDisplay();
+
+            List<string> menuItems = new List<string>();
+            foreach (var pet in pets)
+            {
+                menuItems.Add($"{pet.Name}");
+            }
+
+            menuHistory.Push(currentGameState);
+
+            PetBase selectedPet = null;
+            Renderer.RenderMenuContent(menuItems, (i) =>
+            {
+                Renderer.ClearSection("display");
+                selectedPet = pets[i];
+
+                Renderer.RenderDisplayContent(new string[] { selectedPet.GetPetSprite() });
+                Renderer.SetDisplayContent($"Training with {selectedPet.Name}", 12);
+                Renderer.RenderProgressBar(13, 2000);
+
+                selectedPet.GainExperience();
+                menuHistory.Push(currentGameState);
+            });
+        }
+
+        private void SetMainMenuDisplay()
         {
             Renderer.ClearSection("display");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -197,7 +235,7 @@ namespace virtual_pet.Core.Manager
             Console.ResetColor();
         }
 
-        public void SetOverviewDisplay()
+        private void SetOverviewDisplay()
         {
             Renderer.ClearSection("display");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -207,6 +245,29 @@ namespace virtual_pet.Core.Manager
      @ (o) (o) @       ==============================================
       |   <   |        |   Which pet do you want to take care of?   |
       |  ___  |        ==============================================
+       \_____/
+     ____|  |____
+    /    \__/    \
+   /              \
+  /\_/|        |\_/\
+ / /  |        |  \ \
+( <   |        |   > )
+ \ \  |        |  / /
+  \ \ |________| / /
+   \ \|        |/ /", 1);
+            Console.ResetColor();
+        }
+
+        private void SetTrainingDisplay()
+        {
+            Renderer.ClearSection("display");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Renderer.SetDisplayContent(
+@"      ////^\\\\
+      | ^   ^ |
+     @ (o) (o) @       =======================================
+      |   <   |        |   Which pet do you want to train?   |
+      |  ___  |        =======================================
        \_____/
      ____|  |____
     /    \__/    \
