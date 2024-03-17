@@ -2,6 +2,7 @@
 {
     MainMenu,
     Overview,
+    PetOverview,
     Ingame,
     Exit
 }
