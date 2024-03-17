@@ -4,7 +4,7 @@ using virtual_pet.Core.Util;
 
 namespace virtual_pet.Core.Manager
 {
-    internal class InventoryManager
+    public class InventoryManager
     {
         private readonly string filePath;
         private List<ItemBase> items;
