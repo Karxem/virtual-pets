@@ -1,7 +1,10 @@
-﻿namespace virtual_pet.Core.Util
+﻿using virtual_pet.Core.Manager;
+
+namespace virtual_pet.Core.Util
 {
     public class Renderer
     {
+        public static event Action BackspacePressed;
         private const int HeaderHeight = 6;
         private const int DisplayHeight = 20;
         private const int MenuHeight = 9;
@@ -10,11 +13,6 @@
         private static string[] inputBuffer = new string[DisplayHeight];
 
         public static void Initialize()
-        {
-            RenderLayout();
-        }
-
-        private static void RenderLayout()
         {
             Console.CursorVisible = false;
             Console.Clear();
@@ -116,10 +114,14 @@
                         break;
                 }
 
+                if (key.Key == ConsoleKey.Backspace)
+                {
+                    BackspacePressed?.Invoke();
+                }
+
             } while (key.Key != ConsoleKey.Backspace);
 
-            ClearSection("menu");
-            ClearSection("display");
+            ClearSection("menu");  
             return selectedItemIndex;
         }
 

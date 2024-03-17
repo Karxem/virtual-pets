@@ -51,7 +51,6 @@ namespace virtual_pet.Core.Manager
             existingPet.Level.Value = newPet.Level;
         }
 
-        // Load a pet from file based on its name
         public PetBase LoadPet(string name)
         {
             var loadedPet = pets.Find(pets => pets.Name == name);
