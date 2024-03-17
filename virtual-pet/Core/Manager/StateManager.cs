@@ -8,6 +8,7 @@ namespace virtual_pet.Core.Manager
         private static readonly PetManager petManager = new PetManager();
         private static readonly InventoryManager inventoryManager = new InventoryManager();
         private static GameState currentGamestate = new GameState();
+        private Stack<GameState> menuHistory = new Stack<GameState>();
 
         private static List<PetBase> pets = new List<PetBase>();
         private static List<ItemBase> items = new List<ItemBase>();
@@ -15,21 +16,41 @@ namespace virtual_pet.Core.Manager
         public void Initialize()
         {
             currentGamestate = GameState.MainMenu;
+            menuHistory.Push(currentGameState);
             pets = petManager.GetPets();
             items = inventoryManager.GetItems();
 
             Renderer.Initialize();
+            Renderer.BackspacePressed += GoBack;
+
             SetMainMenu();
         }
 
-        public static void Shutdown()
+        public void GoBack()
         {
+            Renderer.ClearSection("display");
+            
+            if (menuHistory.Count < 1)
+            {
+                return;
+            }
 
         }
+            menuHistory.Pop();
+            currentGameState = menuHistory.Peek(); 
 
         public static GameState GetGamestate()
         {
             return currentGamestate;
+            switch (currentGameState)
+            {
+                case GameState.MainMenu:
+                    SetMainMenuDisplay();
+                    break;
+                case GameState.Overview:
+                    SetOverviewDisplay();
+                    break;
+            }
         }
 
         private static void SetMainMenu()
@@ -74,6 +95,7 @@ namespace virtual_pet.Core.Manager
             }
 
             currentGamestate = gamestate;
+            menuHistory.Push(gamestate);
 
             switch (gamestate)
             {
@@ -98,9 +120,11 @@ namespace virtual_pet.Core.Manager
             Renderer.RenderMenuContent(menuItems, (i) =>
             {
                 Renderer.ClearSection("display");
+                menuHistory.Push(currentGameState);
 
                 PetBase pet = pets[i];
                 Renderer.SetDisplayContent(pet.ShowPetOverview(), 0);
+                                menuHistory.Push(currentGameState);
             });
         }
     }
