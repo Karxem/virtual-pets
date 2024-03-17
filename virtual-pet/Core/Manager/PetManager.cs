@@ -5,7 +5,7 @@ using virtual_pet.Core.Entity.Common;
 
 namespace virtual_pet.Core.Manager
 {
-    internal class PetManager
+    public class PetManager
     {
         private readonly string filePath;
         private static System.Timers.Timer timer;

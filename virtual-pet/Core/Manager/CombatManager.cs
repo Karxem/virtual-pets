@@ -2,7 +2,7 @@
 
 namespace virtual_pet.Core.Manager
 {
-    internal class CombatManager
+    public class CombatManager
 	{
         private static readonly PetManager petManager = new PetManager();
         private static readonly InventoryManager inventoryManager = new InventoryManager();
@@ -149,7 +149,6 @@ namespace virtual_pet.Core.Manager
             }
             return choice;
         }
-
 
         private int CalculateDamage(PetBase attacker, PetBase defender)
         {
