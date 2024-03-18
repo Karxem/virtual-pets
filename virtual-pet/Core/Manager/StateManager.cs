@@ -34,6 +34,7 @@ namespace virtual_pet.Core.Manager
 
             if (menuHistory.Count <= 1)
             {
+                SetMainMenuDisplay();
                 return;
             }
 
